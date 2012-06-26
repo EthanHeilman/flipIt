@@ -1,0 +1,20 @@
+body{
+  background-color:#ffffff;
+  
+  margin-right:100px;
+  margin-left:100px;
+  margin-bottom:200px;
+
+  width:800px;
+}
+
+canvas{
+  margin-top:25px;
+  margin-bottom:25px;
+  margin-left:50px;
+  margin-right:50px;
+}
+
+#buttons{
+  margin-left:50px;
+}
