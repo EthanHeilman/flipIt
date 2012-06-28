@@ -8,9 +8,11 @@
     <!-- Start flipit.js once the document loads -->
     <script type="text/javascript">
       $(document).ready(function(){
-        var numRounds = 5000;
+        var numRounds = 1000;
         var msPerTick = 1;
-        var game = new FlipItGame( $("#game_board"), numRounds, msPerTick, neverMove, randomMove);
+
+        var game = new FlipItGame( new Render($("#game_board")), numRounds, msPerTick, periodicMove, randomMove);
+        game.newGame();
         
         //setup buttons
         $("#start_btn").click( function() {
@@ -34,12 +36,6 @@
       <h1 id="title">FlipIt - The Game of Stealthy Takeover</h1>
     </div>
 
-
-    <div id="directions_panel">
-      <h2 id="how_title"> * How to play:</h2>
-      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-    </div>
-
     <div id="game_planel">
 
       <canvas id="game_board" width="700" height="200"></canvas>
@@ -48,7 +44,30 @@
         <button id="start_btn">Start</button>
         <button id="flip_btn">Flip</button>
       </div>
+
+      <div id="score">
+        <table>
+          <th></th><th>blue</td><th>red</td>
+          <tr>
+            <th>captured</th>
+            <td>1</td><td>2</td>
+          </tr>
+          <tr>
+            <th>-cost</th>
+            <td>3</td><td>4</td>
+          </tr>
+          <tr>
+            <th>total</th>
+            <td>5</td><td>6</td>
+          </tr>
+        </table>
+      </div>
     
+    </div>
+
+    <div id="directions_panel">
+      <h2 id="how_title"> * How to play:</h2>
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
     </div>
 
     <div id="about_panel">

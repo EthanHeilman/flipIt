@@ -1,60 +1,49 @@
-function FlipItGame( board, numRounds, msPerTick, playerX, playerY ){
+function FlipItGame( render, numRounds, msPerTick, playerX, playerY ){
+  
+  this.newGame = function(){
+    this.running = false;
+    clearInterval( this.clock );
+    this.ticks = 0;
+    this.control = "X";
+    this.flips = [];
+
+    this.render.drawBoard( 0, this.numRounds, this.flips );
+  }
 
   this.numRounds = numRounds;
   this.msPerTick = msPerTick;
-  this.flips = [];
+  this.render = render;
 
-  this.running = false;
-
-  this.boardx = 0; 
-  this.boardy = 0; 
-  this.boardw = 700; 
-  this.boardh = 200; 
-
-  //setup board
-  this.context = board[0].getContext("2d");
-  
-  drawBoard( this.context, this.boardx, this.boardy, this.boardw, this.boardh, 0, this.numRounds, this.flips );
-
+  //this is the main game loop
   this.tick = function() {
-    
     if( this.ticks >= this.numRounds ) {
-
-      this.stop();
-
-    } else {
+      this.endGame();
+      return;
+    } 
     
-      this.ticks += 1;
+    this.ticks += 1;
 
-      drawBoard( this.context, this.boardx, this.boardy, this.boardw, this.boardh, this.ticks, this.numRounds, this.flips );
-      
-      //if a human is planning then their player function is set to neverMove()
-      if( playerX( this.ticks ) ){ this.defenderFlip() }; //player x makes their move
-      if( playerY( this.ticks ) ){ this.attackerFlip() }; //player y makes their move
+    //if a human is planning then their player function is set to neverMove()
+    if( playerX( this.ticks ) ){ this.defenderFlip() }; //player x makes their move
+    if( playerY( this.ticks ) ){ this.attackerFlip() }; //player y makes their move
 
-
-    }
-
-    //console.log( this.gameState );
+    this.render.drawBoard( this.ticks, this.numRounds, this.flips );
   }
 
+
+
   this.start = function() {
+    this.newGame();
+
     if (this.running == false ){
       this.running = true;
-
-      //setup new game
-      this.ticks = 0;
-      this.control = "X";
-      this.flips = [];
-
-      drawBoard( this.context, this.boardx, this.boardy, this.boardw, this.boardh, 0, this.numRounds, this.flips );
 
       var self = this; //Save the current context
       this.clock = setInterval( function(){ self.tick(); }, this.msPerTick);
     }
   };
 
-  this.stop = function() {
+  this.endGame = function() {
     clearInterval( this.clock );
     this.running = false;
     console.log( "done." );
@@ -81,68 +70,69 @@ function randomMove( ticks ){ return Math.random(ticks) < 0.003; };
 function periodicMove( ticks ){ return ticks % 300 == 0; };
 
 
-function drawBoard(context, x, y, w, h, ticks, rounds, flips){
-  context.clearRect ( x, y, w, h );
+function Render( board ){
+  this.board = board;
+  this.circle_size = this.board.width()/200;
 
-  drawArrow( context, x, h/2, w, h/2 );
 
-  var size = w/200; 
+  this.drawBoard = function(ticks, rounds, flips){
+    var context = this.board[0].getContext("2d");
 
-  var control = "X";
-  var lastFlip = 0;
+    var w = this.board.width();
+    var h = this.board.height();
 
-  var xIntervals = [];
-  var yIntervals = [];
+    // maps ticks in the game state to x-coordines on the board
+    mapX = function( tick ){
+      return (tick/rounds) * w;
+    };
 
-  for ( var tick = 0; tick < ticks; tick++ ){
-    if ( tick in flips ){
+    context.clearRect ( 0, 0, w, h );
 
-      if ( flips[tick] == "X" ) {
-        var x = ( tick/rounds ) * w;
-        var y =  h/4;
-        drawCircle( context, "blue", size, x, y); 
-      }
+    var control = "X";
+    var lastFlip = 0;
 
-      if ( flips[tick] == "Y" ) {
-        var x = ( tick/rounds ) * w;
-        var y =  3*h/4;
-        drawCircle( context, "red", size, x, y); 
-      }
+    var xIntervals = [];
+    var yIntervals = [];
 
-      if ( flips[tick] != control ) { //control has been changed
-        if ( flips[tick] == "X" ) yIntervals.push( [lastFlip, tick-1] );
-        if ( flips[tick] == "Y" ) xIntervals.push( [lastFlip, tick-1] );
-        lastFlip = tick;
-        control = flips[tick];
+    for ( var tick = 0; tick < ticks; tick++ ) {
+      if ( tick in flips ) {
+        var x = mapX(tick);
+
+        if ( flips[tick] == "X" ) drawCircle( context, "blue", this.circle_size, x, h/4); 
+        if ( flips[tick] == "Y" ) drawCircle( context, "red", this.circle_size,  x, 3*h/4); 
+        
+        if ( flips[tick] != control ) { //control has been changed
+          if ( flips[tick] == "X" ) yIntervals.push( [lastFlip, tick-1] );
+          if ( flips[tick] == "Y" ) xIntervals.push( [lastFlip, tick-1] );
+          lastFlip = tick;
+          control = flips[tick];
+        }
       }
     }
-  }
 
-  for ( var i in xIntervals ) {
-    var interval = xIntervals[i];
+    //add final interval
+    if( lastFlip < ticks ) {
+      if ( control == "X" ) xIntervals.push( [lastFlip, ticks] );
+      if ( control == "Y" ) yIntervals.push( [lastFlip, ticks] );
+    }
 
-    context.fillStyle = "blue";
-    context.fillRect( (interval[0]/rounds) * w, h/3, (interval[1]/rounds) * w - ( interval[0]/rounds ) * w, h/8 );
-  }
-
-  for ( var i in yIntervals ) {
-    var interval = yIntervals[i];
-
-    context.fillStyle = "red";
-    context.fillRect( (interval[0]/rounds) * w, h - h/3, (interval[1]/rounds) * w - (interval[0]/rounds ) * w, -h/8 );
-  }
-
-  if( lastFlip < ticks ) {
-    if ( control == "X" ) {
+    //draw the intervals (chunks of controlled contigious territory)
+    for ( var i in xIntervals ) {
+      var interval = xIntervals[i];
       context.fillStyle = "blue";
-      context.fillRect( (lastFlip/rounds) * w, h/3, (ticks/rounds) * w - ( lastFlip/rounds ) * w, h/8 );
-    } else if ( control == "Y" ) {
-      context.fillStyle = "red";
-      context.fillRect( (lastFlip/rounds) * w, h - h/3, (ticks/rounds) * w - (lastFlip/rounds ) * w, -h/8 );
+      context.fillRect( mapX(interval[0]), h/3, mapX(interval[1]-interval[0]), h/8 );
     }
-  }
+    for ( var i in yIntervals ) {
+      var interval = yIntervals[i];
+      context.fillStyle = "red";
+      context.fillRect( mapX(interval[0]), h - h/3, mapX(interval[1]-interval[0]), -h/8 );
+    }
 
+    drawArrow( context, 0, h/2, w, h/2 );
+  };
 }
+
+
 
 //canvas util functions
 function drawArrow(context, x1, y1, x2, y2){
