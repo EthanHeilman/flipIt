@@ -8,7 +8,19 @@
     <!-- Start flipit.js once the document loads -->
     <script type="text/javascript">
       $(document).ready(function(){
-        var game = new FlipItGame( "board_id" );
+        var numRounds = 5000;
+        var msPerTick = 1;
+        var game = new FlipItGame( $("#game_board"), numRounds, msPerTick, neverMove, randomMove);
+        
+        //setup buttons
+        $("#start_btn").click( function() {
+          game.start();
+        });
+
+        $("#flip_btn").click( function() {
+            game.defenderFlip();
+        });
+
       });
     </script>
 
@@ -34,7 +46,7 @@
 
       <div id="buttons">
         <button id="start_btn">Start</button>
-        <button id="start_btn">Flip</button>
+        <button id="flip_btn">Flip</button>
       </div>
     
     </div>
