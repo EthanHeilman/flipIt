@@ -1,4 +1,10 @@
-function FlipItGame( render, numRounds, msPerTick, playerX, playerY ){
+function FlipItGame( renderer, playerX, playerY ){
+  var xControlBenefit = 1;
+  var yControlBenefit = 1;
+
+  var xFlipCost = 1;
+  var yFlipCost = 1;
+
   
   this.newGame = function(){
     this.running = false;
@@ -7,57 +13,66 @@ function FlipItGame( render, numRounds, msPerTick, playerX, playerY ){
     this.control = "X";
     this.flips = [];
 
-    this.render.drawBoard( 0, this.numRounds, this.flips );
+    this.xScore = 0;
+    this.yScore = 0;
+
+    renderer.drawBoard( 0, this.flips );
   }
 
-  this.numRounds = numRounds;
-  this.msPerTick = msPerTick;
-  this.render = render;
-
-  //this is the main game loop
-  this.tick = function() {
-    if( this.ticks >= this.numRounds ) {
-      this.endGame();
-      return;
-    } 
-    
-    this.ticks += 1;
-
-    //if a human is planning then their player function is set to neverMove()
-    if( playerX( this.ticks ) ){ this.defenderFlip() }; //player x makes their move
-    if( playerY( this.ticks ) ){ this.attackerFlip() }; //player y makes their move
-
-    this.render.drawBoard( this.ticks, this.numRounds, this.flips );
-  }
-
-
-
-  this.start = function() {
+  this.start = function( msPerTick, numTicks ) {
     this.newGame();
 
     if (this.running == false ){
       this.running = true;
 
       var self = this; //Save the current context
-      this.clock = setInterval( function(){ self.tick(); }, this.msPerTick);
+      this.clock = setInterval( function(){ self.tick( numTicks ); }, msPerTick);
     }
   };
 
   this.endGame = function() {
     clearInterval( this.clock );
     this.running = false;
+    console.log( this.xScore );
+    console.log( this.yScore );
     console.log( "done." );
+  };
+
+
+  //this is the main game loop
+  this.tick = function( numTicks ) {
+    if( this.ticks >= numTicks ) {
+      this.endGame();
+      return;
+    } 
+    
+    this.ticks += 1;
+
+    if ( this.control == "X" ) this.xScore += xControlBenefit;
+    if ( this.control == "Y" ) this.yScore += yControlBenefit;
+
+    //if a human is playing a player function is set to neverMove()
+    if( playerX( this.ticks ) ){ this.defenderFlip() }; //player x makes their move
+    if( playerY( this.ticks ) ){ this.attackerFlip() }; //player y makes their move
+    
+    renderer.drawBoard( this.ticks, this.flips );
   };
 
   this.defenderFlip = function() {
     if (this.running == true) {
       this.flips[this.ticks] = "X";
+      this.control = "X";
+
+      this.xScore -= xFlipCost;
     }
   };
 
   this.attackerFlip = function(){
     if (this.running == true) {
       this.flips[this.ticks] = "Y";
+      this.control = "Y";
+
+      this.yScore -= yFlipCost;
     }
   }
 
@@ -66,27 +81,32 @@ function FlipItGame( render, numRounds, msPerTick, playerX, playerY ){
 
 //Computer players
 function neverMove( ticks ){};
-function randomMove( ticks ){ return Math.random(ticks) < 0.003; };
-function periodicMove( ticks ){ return ticks % 300 == 0; };
+function randomMove( ticks ){ if(ticks % 87 == 0) return Math.random(ticks) < 0.3; };
+function periodicMove( ticks ){ return ticks % 200 == 0; };
 
 
-function Render( board ){
-  this.board = board;
-  this.circle_size = this.board.width()/200;
+function RenderEngine( board, numRounds, playerXColor, playerYColor ){
+  var circle_size = board.width()/200;
+  
+  var rightMargin = 8;
+  var rectHeight = 20;
 
+  // maps ticks in the game state to x-coordines on the board
+  var mapX = function( tick ){
+      return (tick/numRounds) * ( board.width() - rightMargin );
+  };
 
-  this.drawBoard = function(ticks, rounds, flips){
-    var context = this.board[0].getContext("2d");
+  this.drawBoard = function(ticks, flips){
 
-    var w = this.board.width();
-    var h = this.board.height();
+    //only draw every fifth frame
+    if (ticks % 5 != 0 ) return;
 
-    // maps ticks in the game state to x-coordines on the board
-    mapX = function( tick ){
-      return (tick/rounds) * w;
-    };
+    var context = board[0].getContext("2d");
 
-    context.clearRect ( 0, 0, w, h );
+    var h = board.height();
+    var w = board.width();
+
+    context.clearRect( 0, 0, w, h );
 
     var control = "X";
     var lastFlip = 0;
@@ -98,12 +118,12 @@ function Render( board ){
       if ( tick in flips ) {
         var x = mapX(tick);
 
-        if ( flips[tick] == "X" ) drawCircle( context, "blue", this.circle_size, x, h/4); 
-        if ( flips[tick] == "Y" ) drawCircle( context, "red", this.circle_size,  x, 3*h/4); 
+        if ( flips[tick] == "Y" ) drawCircle( context, playerYColor, circle_size, x, h/4); 
+        if ( flips[tick] == "X" ) drawCircle( context, playerXColor, circle_size,  x, 3*h/4); 
         
-        if ( flips[tick] != control ) { //control has been changed
-          if ( flips[tick] == "X" ) yIntervals.push( [lastFlip, tick-1] );
+        if ( flips[tick] != control ) { //control has been changed.
           if ( flips[tick] == "Y" ) xIntervals.push( [lastFlip, tick-1] );
+          if ( flips[tick] == "X" ) yIntervals.push( [lastFlip, tick-1] );
           lastFlip = tick;
           control = flips[tick];
         }
@@ -118,17 +138,27 @@ function Render( board ){
 
     //draw the intervals (chunks of controlled contigious territory)
     for ( var i in xIntervals ) {
-      var interval = xIntervals[i];
-      context.fillStyle = "blue";
-      context.fillRect( mapX(interval[0]), h/3, mapX(interval[1]-interval[0]), h/8 );
+      var interval = xIntervals[i]; 
+      drawRect( context, mapX(interval[0]), h - h/3, mapX(interval[1]-interval[0]), -h/6, playerXColor);
     }
     for ( var i in yIntervals ) {
       var interval = yIntervals[i];
-      context.fillStyle = "red";
-      context.fillRect( mapX(interval[0]), h - h/3, mapX(interval[1]-interval[0]), -h/8 );
+      drawRect( context, mapX(interval[0]), h/3, mapX(interval[1]-interval[0]), h/6, playerYColor );
     }
 
+    //draw the lines after each flip
+    control = "X";
+    for ( var tick in flips ) {
+      if ( flips[tick] != control ){
+        drawHLine( context, mapX(tick), h/3, h/3);
+        control = flips[tick]; 
+      }
+    }
+
+    drawHLine( context, mapX(ticks), h/3, h/3);
+
     drawArrow( context, 0, h/2, w, h/2 );
+    drawHLine( context, 3, h/3, h/3 )
   };
 }
 
@@ -136,13 +166,14 @@ function Render( board ){
 
 //canvas util functions
 function drawArrow(context, x1, y1, x2, y2){
-  context.fillStyle = "black";
 
+  context.fillStyle = "black";
+  context.lineWidth=2;
   //draw a line
   context.beginPath();
     context.moveTo(x1, y1);
     context.lineTo(x2, y2);
-    context.closePath();
+  context.closePath();
   context.stroke();
 
   //draw the head
@@ -154,15 +185,46 @@ function drawArrow(context, x1, y1, x2, y2){
     context.lineTo(x2-head_size, y2+head_size);
     context.lineTo(x2, y2);
   context.closePath();
-
   context.fill();  
-
-};
+}
 
 function drawCircle(context, color, size, x, y){
   context.fillStyle = color;
+  context.lineWidth=2;
   context.beginPath();
     context.arc(x, y, size, 0, Math.PI*2, true); 
   context.closePath();
   context.fill();
-};
+  context.stroke();
+}
+
+function drawRect(context, x, y, w, h, color) {
+  context.fillStyle = color;
+  context.lineWidth=2;
+
+  context.beginPath();
+    context.rect( x, y, w, h );
+  context.closePath();
+  context.fill();
+  context.stroke();
+}
+
+function drawHLine(context, x, y, l) {
+
+  // firefox does not render lines with large widths correctly
+  var line_fix = 0;
+  var is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+  if ( is_firefox ){
+    line_fix = 2;
+  }
+
+  width = 5;
+
+  context.lineWidth= width;
+
+  context.beginPath();
+    context.moveTo(x, y + line_fix);
+    context.lineTo(x, y + l - line_fix);
+  context.closePath();
+  context.stroke();
+}
