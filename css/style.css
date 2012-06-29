@@ -12,3 +12,7 @@ canvas{
   margin-top:0px;
   margin-bottom:0px;
 }
+
+#scoreBoard{
+ text-align:right;
+}

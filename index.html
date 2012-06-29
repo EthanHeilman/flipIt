@@ -12,22 +12,47 @@
         var playerXColor = "0066CC"; //blue
         var playerYColor = "CC2200"; //red
 
-
         var numTicks = 1000;
         var msPerTick = 1;
 
-        var renderer = new RenderEngine( $("#game_board"), numTicks, playerXColor, playerYColor)
+        var comp_renderer = new RenderEngine( $("#gameBoard1"), numTicks, playerXColor, playerYColor )
 
-        var game = new FlipItGame( renderer, periodicMove, randomMove);
+        var comp_game = new FlipItGame( comp_renderer, Players["randomPlayer"], Players["periodicPlayer"] );
+        comp_game.newGame();
+        comp_game.start( msPerTick, numTicks );
+
+        var renderer = new RenderEngine( $("#gameBoard2"), numTicks, playerXColor, playerYColor )
+
+        var finalScoresFunct = function(xScore, yScore) { 
+          console.log(xScore, yScore);
+
+          output = ""
+
+          if (xScore > yScore) output += "<b>Blue Wins!</b> ";
+          if (xScore < yScore) output += "<b>Red Wins!</b> ";
+
+          output += " ";
+
+          output += "<b><font color="+playerXColor+">Blue:</font></b> "+xScore;
+          output += " ";
+          output += "<b><font color="+playerYColor+">Red:</font></b> "+yScore;
+
+          output += "</br>";
+
+          $("#scoreBoard").html(output);
+        };
+
+        var game = new FlipItGame( renderer, Players["humanPlayer"], Players["randomPlayer"], finalScoresFunct );
         game.newGame();
+        finalScoresFunct(0, 0)
         
         //setup buttons
-        $("#start_btn").click( function() {
+        $("#startBtn").click( function() {
           game.start( msPerTick, numTicks );
         });
 
-        $("#flip_btn").click( function() {
-            game.defenderFlip();
+        $("#flipBtn").click( function() {
+          game.defenderFlip();
         });
 
       });
@@ -43,18 +68,21 @@
     </div>
 
 
-    <canvas id="game_board" width="800" height="150"></canvas>
-
-    <button id="start_btn">Start</button> to begin playing. 
-    <button id="flip_btn">Flip</button> or [Space] to flip.
+    <canvas id="gameBoard1" width="800" height="150"></canvas>
 
     <div id="directions_panel">
-      <h2 id="how_title"> * How to play:</h2>
+      <h2 id="howTitle"> * How to play:</h2>
       <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
     </div>
 
-    <div id="about_panel">
-      <h2 id="about_title"> * About the game:</h2>
+
+    <div id="scoreBoard"></div>
+    <canvas id="gameBoard2" width="800" height="150"></canvas>
+    <button id="startBtn">Start</button> to play as the blue player
+    <button id="flipBtn">Flip</button> to flip.
+
+    <div id="aboutPanel">
+      <h2 id="aboutTitle"> * About the game:</h2>
       <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
     </div>
 

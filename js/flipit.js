@@ -1,10 +1,9 @@
-function FlipItGame( renderer, playerX, playerY ){
+function FlipItGame( renderer, playerX, playerY, finalScoresFunct){
   var xControlBenefit = 1;
   var yControlBenefit = 1;
 
-  var xFlipCost = 1;
-  var yFlipCost = 1;
-
+  var xFlipCost = 100;
+  var yFlipCost = 100;
   
   this.newGame = function(){
     this.running = false;
@@ -33,8 +32,10 @@ function FlipItGame( renderer, playerX, playerY ){
   this.endGame = function() {
     clearInterval( this.clock );
     this.running = false;
-    console.log( this.xScore );
-    console.log( this.yScore );
+
+    if ( finalScoresFunct != null ) {
+      finalScoresFunct( this.xScore, this.yScore );
+    }
     console.log( "done." );
   };
 
@@ -75,14 +76,18 @@ function FlipItGame( renderer, playerX, playerY ){
       this.yScore -= yFlipCost;
     }
   }
-
 };
 
 
 //Computer players
-function neverMove( ticks ){};
-function randomMove( ticks ){ if(ticks % 87 == 0) return Math.random(ticks) < 0.3; };
-function periodicMove( ticks ){ return ticks % 200 == 0; };
+var Players = { 
+  "humanPlayer":function( ticks ){ return false }, 
+  "randomPlayer":function( ticks ){ if(ticks % 79 == 0) return Math.random(ticks) < 0.3; },
+  "periodicPlayer":function( ticks ){ return ticks % 200 == 0; }
+  };
+
+
+
 
 
 function RenderEngine( board, numRounds, playerXColor, playerYColor ){
@@ -91,20 +96,22 @@ function RenderEngine( board, numRounds, playerXColor, playerYColor ){
   var rightMargin = 8;
   var rectHeight = 20;
 
-  // maps ticks in the game state to x-coordines on the board
-  var mapX = function( tick ){
-      return (tick/numRounds) * ( board.width() - rightMargin );
-  };
+  this.board = board;
 
   this.drawBoard = function(ticks, flips){
 
     //only draw every fifth frame
     if (ticks % 5 != 0 ) return;
 
-    var context = board[0].getContext("2d");
+    var context = this.board[0].getContext("2d");
 
-    var h = board.height();
-    var w = board.width();
+    var h = this.board.height();
+    var w = this.board.width();
+
+    // maps ticks in the game state to x-coordines on the board
+    var mapX = function( tick ){
+        return (tick/numRounds) * ( w - rightMargin );
+    };
 
     context.clearRect( 0, 0, w, h );
 
@@ -178,7 +185,6 @@ function drawArrow(context, x1, y1, x2, y2){
 
   //draw the head
   var head_size = 7;
-
   context.moveTo(x2, y2);
   context.beginPath();
     context.lineTo(x2-head_size, y2-head_size);
@@ -218,9 +224,7 @@ function drawHLine(context, x, y, l) {
     line_fix = 2;
   }
 
-  width = 5;
-
-  context.lineWidth= width;
+  context.lineWidth= 5;
 
   context.beginPath();
     context.moveTo(x, y + line_fix);
