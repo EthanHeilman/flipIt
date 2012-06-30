@@ -6,8 +6,10 @@ function FlipItGame( renderer, playerX, playerY, finalScoresFunct){
   var yFlipCost = 100;
   
   this.newGame = function(){
-    this.running = false;
     clearInterval( this.clock );
+
+    this.running = false;
+    
     this.ticks = 0;
     this.control = "X";
     this.flips = [];
@@ -24,6 +26,8 @@ function FlipItGame( renderer, playerX, playerY, finalScoresFunct){
     if (this.running == false ){
       this.running = true;
 
+      renderer.newBoard();
+
       var self = this; //Save the current context
       this.clock = setInterval( function(){ self.tick( numTicks ); }, msPerTick);
     }
@@ -33,10 +37,9 @@ function FlipItGame( renderer, playerX, playerY, finalScoresFunct){
     clearInterval( this.clock );
     this.running = false;
 
-    if ( finalScoresFunct != null ) {
-      finalScoresFunct( this.xScore, this.yScore );
-    }
-    console.log( "done." );
+    if ( finalScoresFunct != null ) finalScoresFunct( this.xScore, this.yScore );
+    
+    console.log( "done. "+this.flips );
   };
 
 
@@ -90,13 +93,24 @@ var Players = {
 
 
 
-function RenderEngine( board, numRounds, playerXColor, playerYColor ){
+function RenderEngine( board, numTicks, playerXColor, playerYColor, player, fogOfWar ){
   var circle_size = board.width()/200;
   
   var rightMargin = 8;
   var rectHeight = 20;
 
   this.board = board;
+  this.numTicks = numTicks;
+
+  this.player = player;
+  this.forOfWar = fogOfWar;
+
+  this.newBoard = function(){
+    this.revealed = numTicks; //reveal all 
+    if ( this.fogOfWar ) {
+      this.revealed = 0;
+    } 
+  }
 
   this.drawBoard = function(ticks, flips){
 
@@ -108,9 +122,10 @@ function RenderEngine( board, numRounds, playerXColor, playerYColor ){
     var h = this.board.height();
     var w = this.board.width();
 
+    var numTicks = this.numTicks;
     // maps ticks in the game state to x-coordines on the board
     var mapX = function( tick ){
-        return (tick/numRounds) * ( w - rightMargin );
+        return (tick/numTicks) * ( w - rightMargin );
     };
 
     context.clearRect( 0, 0, w, h );
@@ -125,9 +140,16 @@ function RenderEngine( board, numRounds, playerXColor, playerYColor ){
       if ( tick in flips ) {
         var x = mapX(tick);
 
-        if ( flips[tick] == "Y" ) drawCircle( context, playerYColor, circle_size, x, h/4); 
-        if ( flips[tick] == "X" ) drawCircle( context, playerXColor, circle_size,  x, 3*h/4); 
-        
+        // When "the player" makes a move reveal the board. This only applies when fog is on.
+        if ( flips[tick] == this.player && this.revealed < tick ) {
+          this.revealed = tick;
+        }
+
+        if ( tick <= this.revealed ) { //Don't draw circles if hidden by fog of war
+          if ( flips[tick] == "Y" ) drawCircle( context, playerYColor, circle_size, x, h/4); 
+          if ( flips[tick] == "X" ) drawCircle( context, playerXColor, circle_size,  x, 3*h/4); 
+        } 
+
         if ( flips[tick] != control ) { //control has been changed.
           if ( flips[tick] == "Y" ) xIntervals.push( [lastFlip, tick-1] );
           if ( flips[tick] == "X" ) yIntervals.push( [lastFlip, tick-1] );
@@ -142,6 +164,7 @@ function RenderEngine( board, numRounds, playerXColor, playerYColor ){
       if ( control == "X" ) xIntervals.push( [lastFlip, ticks] );
       if ( control == "Y" ) yIntervals.push( [lastFlip, ticks] );
     }
+
 
     //draw the intervals (chunks of controlled contigious territory)
     for ( var i in xIntervals ) {
@@ -161,6 +184,15 @@ function RenderEngine( board, numRounds, playerXColor, playerYColor ){
         control = flips[tick]; 
       }
     }
+
+    //draw fog of war as long as the game is still running
+    if ( this.fogOfWar && ( ticks != this.numTicks ) ) {
+      var x = this.revealed;
+      var l = ticks - this.revealed;
+      drawRect( context, mapX(x), h - h/3, mapX(l), -h/6, "grey");
+      drawRect( context, mapX(x), h/3, mapX(l), h/6, "grey" );
+    }
+
 
     drawHLine( context, mapX(ticks), h/3, h/3);
 

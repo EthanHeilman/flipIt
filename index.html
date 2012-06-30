@@ -12,26 +12,23 @@
         var playerXColor = "0066CC"; //blue
         var playerYColor = "CC2200"; //red
 
-        var numTicks = 1000;
-        var msPerTick = 1;
+        var numTicksShort = 1000;
+        var numTicksLong = 2000;
+        var msPerTickFast = 1;
+        var msPerTickSlow = 10;
 
-        var comp_renderer = new RenderEngine( $("#gameBoard1"), numTicks, playerXColor, playerYColor )
+
+        // Setup computer game
+        var comp_renderer = new RenderEngine( $("#gameBoard1"), numTicksShort, playerXColor, playerYColor )
 
         var comp_game = new FlipItGame( comp_renderer, Players["randomPlayer"], Players["periodicPlayer"] );
         comp_game.newGame();
-        comp_game.start( msPerTick, numTicks );
+        comp_game.start( msPerTickFast, numTicksShort );
 
-        var renderer = new RenderEngine( $("#gameBoard2"), numTicks, playerXColor, playerYColor )
 
+        // Setup playable game
         var finalScoresFunct = function(xScore, yScore) { 
-          console.log(xScore, yScore);
-
           output = ""
-
-          if (xScore > yScore) output += "<b>Blue Wins!</b> ";
-          if (xScore < yScore) output += "<b>Red Wins!</b> ";
-
-          output += " ";
 
           output += "<b><font color="+playerXColor+">Blue:</font></b> "+xScore;
           output += " ";
@@ -42,17 +39,24 @@
           $("#scoreBoard").html(output);
         };
 
+        var player = "X";
+        var fogOfWar = true;
+        var renderer = new RenderEngine( $("#gameBoard2"), numTicksLong, playerXColor, playerYColor, player, fogOfWar);
+        renderer.fogOfWar = true;
+
         var game = new FlipItGame( renderer, Players["humanPlayer"], Players["randomPlayer"], finalScoresFunct );
         game.newGame();
-        finalScoresFunct(0, 0)
+        finalScoresFunct(0, 0);
         
         //setup buttons
         $("#startBtn").click( function() {
-          game.start( msPerTick, numTicks );
+          finalScoresFunct(0, 0);
+          game.start( msPerTickSlow, numTicksLong );
         });
 
         $("#flipBtn").click( function() {
           game.defenderFlip();
+          finalScoresFunct( game.xScore, game.yScore );
         });
 
       });
