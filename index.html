@@ -11,31 +11,25 @@
     <script type="text/javascript">
       $(document).ready(function(){
 
-        var xColor = "0066CC"; //blue
-        var yColor = "CC2200"; //red
-
         var numTicksShort = 1000;
         var numTicksLong = 2000;
         var msPerTickFast = 1;
         var msPerTickSlow = 10;
 
-
         // Setup computer game
-        var g1Draw = new FlipItRenderEngine( $("#gameBoard1"), numTicksShort, xColor, yColor );
+        var g1Draw = new FlipItRenderEngine( $("#gameBoard1"), numTicksShort );
 
-        var comp_game = new FlipItGame( g1Draw, Players["randomPlayer"], Players["periodicPlayer"] );
-        comp_game.newGame();
-        comp_game.start( msPerTickFast, numTicksShort );
-
-
+        var compGame = new FlipItGame( g1Draw, Players["randomPlayer"], Players["periodicPlayer"] );
+        compGame.newGame();
+        compGame.start( msPerTickFast, numTicksShort );
 
         // Setup player game
         var player = "X";
         var fogOfWar = true;
         var g2Draw = 
-          new FlipItRenderEngine( $("#gameBoard2"), numTicksLong, xColor, yColor, player, fogOfWar);
+          new FlipItRenderEngine( $("#gameBoard2"), numTicksLong, player, fogOfWar);
 
-        var sb = new ScoreBoard( $("#scoreBoard"), xColor, yColor );        
+        var sb = new ScoreBoard( $("#scoreBoard"), g2Draw.xColor, g2Draw.yColor );        
 
         var game = new FlipItGame( g2Draw, Players["humanPlayer"], Players["randomPlayer"], sb.update );
         game.newGame();
@@ -55,7 +49,7 @@
         var numTicks = 1000;
         var xColor = "0066CC"; //blue
         var yColor = "CC2200"; //red
-        var not1draw = new FlipItRenderEngine( $("#gameBoard3"), numTicks, xColor, yColor );
+        var not1draw = new FlipItRenderEngine( $("#gameBoard3"), numTicks );
         not1draw.newBoard();
         not1draw.drawBoard(1000, {300: "X", 500: "Y", 900: "X"});
 

@@ -1,10 +1,12 @@
 
 
-function FlipItRenderEngine( board, numTicks, playerXColor, playerYColor, player, fogOfWar ){
-  var circle_size = board.width()/200;
+function FlipItRenderEngine( board, numTicks, player, fogOfWar ){
+  var circleSize = board.width()/200;
   
   var rightMargin = 8;
-  var rectHeight = 20;
+
+  this.xColor = "0066CC"; //blue
+  this.yColor = "CC2200"; //red
 
   this.board = board;
   this.numTicks = numTicks;
@@ -50,8 +52,8 @@ function FlipItRenderEngine( board, numTicks, playerXColor, playerYColor, player
         }
 
         if ( tick <= this.revealed ) { //Don't draw circles if hidden by fog of war
-          if ( flips[tick] == "Y" ) drawCircle( context, playerYColor, circle_size, x, h/4); 
-          if ( flips[tick] == "X" ) drawCircle( context, playerXColor, circle_size,  x, 3*h/4); 
+          if ( flips[tick] == "Y" ) drawCircle( context, this.yColor, circleSize, x, h/4); 
+          if ( flips[tick] == "X" ) drawCircle( context, this.xColor, circleSize,  x, 3*h/4); 
         } 
 
         if ( flips[tick] != control ) { //control has been changed.
@@ -73,11 +75,11 @@ function FlipItRenderEngine( board, numTicks, playerXColor, playerYColor, player
     //draw the intervals (chunks of controlled contigious territory)
     for ( var i in xIntervals ) {
       var interval = xIntervals[i]; 
-      drawRect( context, mapX(interval[0]), h - h/3, mapX(interval[1]-interval[0]), -h/6, playerXColor);
+      drawRect( context, mapX(interval[0]), h - h/3, mapX(interval[1]-interval[0]), -h/6, this.xColor);
     }
     for ( var i in yIntervals ) {
       var interval = yIntervals[i];
-      drawRect( context, mapX(interval[0]), h/3, mapX(interval[1]-interval[0]), h/6, playerYColor );
+      drawRect( context, mapX(interval[0]), h/3, mapX(interval[1]-interval[0]), h/6, this.yColor );
     }
 
     //draw the lines after each flip
