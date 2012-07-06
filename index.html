@@ -12,46 +12,53 @@
       $(document).ready(function(){
 
         var numTicksShort = 1000;
-        var numTicksLong = 2000;
         var msPerTickFast = 1;
-        var msPerTickSlow = 10;
+        
 
         // Setup computer game
-        var g1Draw = new FlipItRenderEngine( $("#gameBoard1"), numTicksShort );
+        var g1Conf = new RenderSettings( $("#gameBoard1") ); 
+        g1Conf.numticks = numTicksShort;
+        var g1Draw = new FlipItRenderEngine( g1Conf );
 
-        var compGame = new FlipItGame( g1Draw, Players["randomPlayer"], Players["periodicPlayer"] );
-        compGame.newGame();
-        compGame.start( msPerTickFast, numTicksShort );
+        var g1 = new FlipItGame( g1Draw, 
+          Players["randomPlayer"], Players["periodicPlayer"] );
+        
+        g1.newGame();
+        g1.start( msPerTickFast, numTicksShort );
 
         // Setup player game
-        var player = "X";
-        var fogOfWar = true;
-        var g2Draw = 
-          new FlipItRenderEngine( $("#gameBoard2"), numTicksLong, player, fogOfWar);
+        var msPerTickSlow = 10;
+                var numTicksLong = 2000;
 
-        var sb = new ScoreBoard( $("#scoreBoard"), g2Draw.xColor, g2Draw.yColor );        
+        var g2conf = new RenderSettings( $("#gameBoard2") ); 
 
-        var game = new FlipItGame( g2Draw, Players["humanPlayer"], Players["randomPlayer"], sb.update );
-        game.newGame();
+        //g2Settings.player = "X";
+        g2conf.fogOfWar = true;
+        g2conf.numTicks = numTicksLong;
+
+        var g2Draw = new FlipItRenderEngine( g2conf );
+        var sb = new ScoreBoard( $("#scoreBoard"), g2conf.xColor, g2conf.yColor );        
+        var g2 = new FlipItGame( g2Draw, 
+          Players["humanPlayer"], Players["randomPlayer"], sb.update );
+
+        g2.newGame();
         sb.update(0, 0);
         
         //setup buttons
         $("#startBtn").click( function() {
           sb.update(0, 0);
-          game.start( msPerTickSlow, numTicksLong );
+          g2.start( msPerTickSlow, numTicksLong );
         });
 
         $("#flipBtn").click( function() {
-          game.defenderFlip();
-          sb.update( game.xScore, game.yScore );
+          g2.defenderFlip();
+          sb.update( g2.xScore, g2.yScore );
         });
 
-        var numTicks = 1000;
-        var xColor = "0066CC"; //blue
-        var yColor = "CC2200"; //red
-        var not1draw = new FlipItRenderEngine( $("#gameBoard3"), numTicks );
-        not1draw.newBoard();
-        not1draw.drawBoard(1000, {300: "X", 500: "Y", 900: "X"});
+        var g3Conf = new RenderSettings( $("#gameBoard3") ); 
+        var g3Draw = new FlipItRenderEngine( g3Conf );
+        g3Draw.newBoard();
+        g3Draw.drawBoard(1000, {300: "X", 500: "Y", 900: "X"});
 
       });
     </script>
@@ -66,11 +73,34 @@
     </div>
 
 
+    <div id="aboutPanel">
+      <h2 id="aboutTitle">Example 1: Computer against computer.</h2>
+      <code>
+      <!-- 
+      <canvas id="gameBoard1" width="800" height="150"></canvas>
+
+      <script>
+        var numTicksShort = 1000;
+        var msPerTickFast = 1;
+              
+        var gConf = new RenderSettings( $("#gameBoard") ); 
+        gConf.numticks = numTicksShort;
+        var gDraw = new FlipItRenderEngine( gConf );
+
+        var g = new FlipItGame( gDraw, 
+          Players["randomPlayer"], Players["periodicPlayer"] );
+              
+        g.newGame();
+        g.start( msPerTickFast, numTicksShort );
+      </script>
+      -->
+      </code>
+    </div>
+
     <canvas id="gameBoard1" width="800" height="150"></canvas>
 
-    <div id="aboutPanel">
-      <h2 id="aboutTitle"> * About the game:</h2>
-      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+    <div id="directions_panel">
+      <h2 id="howTitle">Example 2: Play against the computer.</h2>
     </div>
 
     <div id="scoreBoard"></div>
@@ -78,14 +108,9 @@
     <button id="startBtn">Start</button> to play as the blue player
     <button id="flipBtn">Flip</button> to flip.
 
-    <div id="directions_panel">
-      <h2 id="howTitle"> * How to play:</h2>
-      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-    </div>
 
     <div id="directions_panel">
-      <h2 id="howTitle"> * FlipIt notation systen:</h2>
-      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+      <h2 id="howTitle">Example 3: Draw previous games.</h2>
     </div>
 
     <canvas id="gameBoard3" width="800" height="150"></canvas>

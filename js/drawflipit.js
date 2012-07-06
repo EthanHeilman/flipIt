@@ -1,34 +1,78 @@
+/**
+ * @author Ethan Heilman
+ *
+ **/
 
 
-function FlipItRenderEngine( board, numTicks, player, fogOfWar ){
-  var circleSize = board.width()/200;
-  
-  var rightMargin = 8;
-
-  this.xColor = "0066CC"; //blue
-  this.yColor = "CC2200"; //red
+/**
+ * Holds all the settings for the FlitItRenderEngine.
+ *
+ *
+ * @param board  the board element which we draw on.
+ *
+ */
+function RenderSettings( board ){
 
   this.board = board;
-  this.numTicks = numTicks;
+  this.numTicks = 1000; // length of game in turns
+  this.xColor = "0066CC"; // blue
+  this.yColor = "CC2200"; // red
+  this.player = "X";
+  this.fogOfWar = false;
+  this.rightMargin = 8;
 
-  this.player = player;
-  this.fogOfWar = fogOfWar;
+}
 
+
+/**
+ * Responsible for drawing flip it games.
+ *
+ * new FlipItRenderEngine( new RenderSettings( $("board") ) ) 
+ *
+ * @param renderSettings  the settings for this object.
+ *
+ */
+function FlipItRenderEngine( renderSettings ) {
+
+  // Setup the object.
+  var board = renderSettings.board;
+  var numTicks = renderSettings.numTicks;
+
+  var xColor = renderSettings.xColor; 
+  var yColor = renderSettings.yColor; 
+
+  var player = renderSettings.player;
+  var fogOfWar = renderSettings.fogOfWar;
+
+  var circleSize = board.width()/200;
+  var rightMargin = renderSettings.rightMargin;
+
+
+  /**
+   * Sets up a new board. 
+   **/
   this.newBoard = function(){
-    this.revealed = numTicks; //reveal all 
-    if ( this.fogOfWar ) {
-      this.revealed = 0;
-    } 
+    this.revealed = numTicks; // reveal all 
+
+    if ( fogOfWar ) this.revealed = 0; // hide all
+  
   };
 
+  /**
+   * Given a list of the flips which have occured draws the state of the game.
+   *
+   * this.drawBoard( int, { int: string, int:string ...} )
+   * 
+   * ticks  current number of ticks/turns into the game (what turn is it).
+   * flips  state of the game. { tick : ("X"|"Y") }
+   **/
   this.drawBoard = function(ticks, flips){
 
-    var context = this.board[0].getContext("2d");
+    var context = board[0].getContext("2d");
 
-    var h = this.board.height();
-    var w = this.board.width();
+    var h = board.height();
+    var w = board.width();
 
-    var numTicks = this.numTicks;
     // maps ticks in the game state to x-coordines on the board
     var mapX = function( tick ){
         return (tick/numTicks) * ( w - rightMargin );
@@ -47,16 +91,16 @@ function FlipItRenderEngine( board, numTicks, player, fogOfWar ){
         var x = mapX(tick);
 
         // When "the player" makes a move reveal the board. This only applies when fog is on.
-        if ( flips[tick] == this.player && this.revealed < tick ) {
+        if ( flips[tick] == player && this.revealed < tick ) {
           this.revealed = tick;
         }
 
-        if ( tick <= this.revealed ) { //Don't draw circles if hidden by fog of war
-          if ( flips[tick] == "Y" ) drawCircle( context, this.yColor, circleSize, x, h/4); 
-          if ( flips[tick] == "X" ) drawCircle( context, this.xColor, circleSize,  x, 3*h/4); 
+        if ( tick <= this.revealed ) { // Don't draw circles if hidden by fog of war.
+          if ( flips[tick] == "Y" ) drawCircle( context, yColor, circleSize, x, h/4); 
+          if ( flips[tick] == "X" ) drawCircle( context, xColor, circleSize,  x, 3*h/4); 
         } 
 
-        if ( flips[tick] != control ) { //control has been changed.
+        if ( flips[tick] != control ) { // Control has been changed.
           if ( flips[tick] == "Y" ) xIntervals.push( [lastFlip, tick-1] );
           if ( flips[tick] == "X" ) yIntervals.push( [lastFlip, tick-1] );
           lastFlip = tick;
@@ -65,24 +109,24 @@ function FlipItRenderEngine( board, numTicks, player, fogOfWar ){
       }
     }
 
-    //add final interval
+    // Add final interval
     if( lastFlip < ticks ) {
       if ( control == "X" ) xIntervals.push( [lastFlip, ticks] );
       if ( control == "Y" ) yIntervals.push( [lastFlip, ticks] );
     }
 
 
-    //draw the intervals (chunks of controlled contigious territory)
+    // Draw the intervals (chunks of controlled contigious territory)
     for ( var i in xIntervals ) {
       var interval = xIntervals[i]; 
-      drawRect( context, mapX(interval[0]), h - h/3, mapX(interval[1]-interval[0]), -h/6, this.xColor);
+      drawRect( context, mapX(interval[0]), h - h/3, mapX(interval[1]-interval[0]), -h/6, xColor);
     }
     for ( var i in yIntervals ) {
       var interval = yIntervals[i];
-      drawRect( context, mapX(interval[0]), h/3, mapX(interval[1]-interval[0]), h/6, this.yColor );
+      drawRect( context, mapX(interval[0]), h/3, mapX(interval[1]-interval[0]), h/6, yColor );
     }
 
-    //draw the lines after each flip
+    // Draw the lines after each flip
     control = "X";
     for ( var tick in flips ) {
       if ( flips[tick] != control ){
@@ -91,14 +135,13 @@ function FlipItRenderEngine( board, numTicks, player, fogOfWar ){
       }
     }
 
-    //draw fog of war as long as the game is still running
-    if ( this.fogOfWar && ( ticks != this.numTicks ) ) {
+    // Draw fog of war as long as the game is still running
+    if ( fogOfWar && ( ticks != numTicks ) ) {
       var x = this.revealed;
       var l = ticks - this.revealed;
       drawRect( context, mapX(x), h - h/3, mapX(l), -h/6, "grey");
       drawRect( context, mapX(x), h/3, mapX(l), h/6, "grey" );
     }
-
 
     drawHLine( context, mapX(ticks), h/3, h/3);
 
@@ -107,7 +150,16 @@ function FlipItRenderEngine( board, numTicks, player, fogOfWar ){
   };
 }
 
-// Setup playable game
+/**
+ * Displays the current score.
+ *
+ * new ScoreBoard( $("element"),  color, color )
+ *
+ * @param scoreBoardElement   html element to write out to.
+ * @param xColor  html color of the x player.
+ * @param yColor  html color of the y player.
+ *
+ */
 function ScoreBoard( scoreBoardElement, xColor, yColor ) {
 
   this.update = function(xScore, yScore) { 
@@ -124,7 +176,11 @@ function ScoreBoard( scoreBoardElement, xColor, yColor ) {
 };
 
 
-//canvas util functions
+/**
+ * Canvas util functions
+ *
+ *
+ */
 function drawArrow(context, x1, y1, x2, y2){
 
   context.fillStyle = "black";
@@ -168,6 +224,7 @@ function drawRect(context, x, y, w, h, color) {
   context.stroke();
 }
 
+// Draws a horizontal line starting a the point (x, y) of length l
 function drawHLine(context, x, y, l) {
 
   // firefox does not render lines with large widths correctly
