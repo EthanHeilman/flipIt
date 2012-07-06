@@ -1,7 +1,7 @@
 flipIt- The Game of Stealthy Takeover
 ======
 
-A javascript implementation of [flipIt](http://www.rsa.com/rsalabs/node.asp?id=3911) the game of stealthy takeover. 
+A javascript implementation of flipIt the game of stealthy takeover. 
 The game was invented by Marten van Dijk, Ari Juels, Alina Oprea, and Ronald L. Rivest in the paper [FLIPIT: The Game of “Stealthy Takeover”](http://www.rsa.com/rsalabs/presentations/Flipit.pdf). 
 This is the only known computer implementation of the game that I know of.
 
