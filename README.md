@@ -36,6 +36,7 @@ Each flip is seperated from the other flips by a comma.
 Turn 100 X flips, Turn 200 X flips, Turn 233 Y Flips becomes 100:X,200:X,233Y.
 These games can be saved to png files by right clicking and choosing 'Save Image As' (works only in firefox).
 You can embed games rendered in this fashion add the html code:
+
     <iframe 
     src="http://ethanheilman.github.com/flipIt/drawgame.html?flips=100:X,200:Y,300:Y,400:X,450:Y" 
     width="850" height="200" frameborder="0"></iframe>
