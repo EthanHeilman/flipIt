@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/flipit.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/drawflipit.js"></script>
+
+    <!-- Start flipit.js once the document loads -->
+    <script type="text/javascript">
+      $(document).ready(function(){
+
+        var config = new RenderSettings( $("#gameBoard") ); 
+        var draw = new FlipItRenderEngine( config );
+        draw.newBoard();
+        draw.drawBoard(1000, {300: "X", 500: "Y", 900: "X"});
+
+      });
+    </script>
+
+  </head>
+  <body>
+    <canvas id="gameBoard" width="800" height="150"></canvas>
+  </body>
+    
+</html>
