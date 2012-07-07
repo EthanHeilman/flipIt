@@ -35,7 +35,7 @@ The format is the turn at which the flip was made (out of 1000 turns) and which 
 Each flip is seperated from the other flips by a comma. 
 Turn 100 X flips, Turn 200 X flips, Turn 233 Y Flips becomes 100:X,200:X,233Y.
 These games can be saved to png files by right clicking and choosing 'Save Image As' (works only in firefox).
-You can embed games rendered in this fashion add the html code:
+You can embed games rendered in this fashion in webpages by adding the html code:
 
     <iframe 
     src="http://ethanheilman.github.com/flipIt/drawgame.html?flips=100:X,200:Y,300:Y,400:X,450:Y" 
