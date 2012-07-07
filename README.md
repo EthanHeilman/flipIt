@@ -34,13 +34,17 @@ To see all three examples in action go to [ethanheilman.github.com/flipIt](http:
 
 A Computer vs computer game can be added to a webpage by either linked to an iframe like so
 
-    <iframe src="http://ethanheilman.github.com/flipIt/computer.html" width="850" height="200" frameborder="0"></iframe>
+    <iframe src="http://ethanheilman.github.com/flipIt/computer.html" 
+    width="850" height="200" frameborder="0"></iframe>
 
 or by including the following javascript
 
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/flipit.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/drawflipit.js"></script>
+    <script type="text/javascript" 
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" 
+    src="https://raw.github.com/EthanHeilman/flipIt/master/js/flipit.js"></script>
+    <script type="text/javascript" 
+    src="https://raw.github.com/EthanHeilman/flipIt/master/js/drawflipit.js"></script>
 
     <canvas id="gameBoard" width="800" height="150"></canvas>
 
@@ -67,13 +71,17 @@ To see this example in action go to [ethanheilman.github.com/flipIt/computer.htm
 
 A human vs computer game can be added to a webpage by either linking to an iframe like so
 
-    <iframe src="http://ethanheilman.github.com/flipIt/playable.html" width="850" height="250" frameborder="0"></iframe>
+    <iframe src="http://ethanheilman.github.com/flipIt/playable.html" 
+    width="850" height="250" frameborder="0"></iframe>
 
 or by including the following javascript
 
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/flipit.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/drawflipit.js"></script>
+    <script type="text/javascript" 
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" 
+    src="https://raw.github.com/EthanHeilman/flipIt/master/js/flipit.js"></script>
+    <script type="text/javascript" 
+    src="https://raw.github.com/EthanHeilman/flipIt/master/js/drawflipit.js"></script>
 
     <div id="scoreBoard"></div>
     <canvas id="gameBoard2" width="800" height="150"></canvas>
@@ -116,9 +124,12 @@ If you have a list of moves in a flipIt and we wish to render the state of the g
 
 
 
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/flipit.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/drawflipit.js"></script>
+    <script type="text/javascript" 
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" 
+    src="https://raw.github.com/EthanHeilman/flipIt/master/js/flipit.js"></script>
+    <script type="text/javascript" 
+    src="https://raw.github.com/EthanHeilman/flipIt/master/js/drawflipit.js"></script>
 
     <canvas id="gameBoard3" width="800" height="150"></canvas>
 
