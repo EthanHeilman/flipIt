@@ -28,7 +28,7 @@ Examples
 --------
 
 Working examples can be found in the examples directory. 
-To see all three examples in action go to [ethanheilman.github.com/flipIt](http://ethanheilman.github.com/flipIt).
+To see all three examples in action go to [http://ethanheilman.github.com/flipIt](http://ethanheilman.github.com/flipIt).
 
 ## Computer vs computer game:
 
@@ -37,7 +37,7 @@ A Computer vs computer game can be added to a webpage by either linked to an ifr
     <iframe src="http://ethanheilman.github.com/flipIt/computer.html" 
     width="850" height="200" frameborder="0"></iframe>
 
-or by including the following javascript
+or by including the following javascript.
 
     <script type="text/javascript" 
     src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -64,7 +64,7 @@ or by including the following javascript
         game.start( msPerTickFast, numTicksShort );
     </script>
 
-To see this example in action go to [ethanheilman.github.com/flipIt/computer.html](http://ethanheilman.github.com/flipIt/computer.html).
+To see this example in action go to [http://ethanheilman.github.com/flipIt/computer.html](http://ethanheilman.github.com/flipIt/computer.html).
 
 
 ## Human vs computer game:
@@ -74,7 +74,7 @@ A human vs computer game can be added to a webpage by either linking to an ifram
     <iframe src="http://ethanheilman.github.com/flipIt/playable.html" 
     width="850" height="250" frameborder="0"></iframe>
 
-or by including the following javascript
+or by including the following javascript.
 
     <script type="text/javascript" 
     src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -116,7 +116,7 @@ or by including the following javascript
         });
     </script>
 
-To see this example in action go to [ethanheilman.github.com/flipIt/playable.html](http://ethanheilman.github.com/flipIt/playable.html).
+To see this example in action go to [http://ethanheilman.github.com/flipIt/playable.html](http://ethanheilman.github.com/flipIt/playable.html).
 
 ## Draw games based on recorded moves.
 
@@ -141,4 +141,4 @@ If you have a list of moves in a flipIt and we wish to render the state of the g
     </script>
 
 In the above example we render the game X flips on turn 300, Y flips on turn 500, X flips on turn 900, out of a total 1000 turns. 
-To see this example in action go to [ethanheilman.github.com/flipIt/drawgame.html](http://ethanheilman.github.com/flipIt/drawgame.html).
+To see this example in action go to [http://ethanheilman.github.com/flipIt/drawgame.html](http://ethanheilman.github.com/flipIt/drawgame.html).
