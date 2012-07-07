@@ -1,4 +1,4 @@
-flipIt- The Game of Stealthy Takeover
+flipIt - The Game of Stealthy Takeover
 ======
 
 A javascript implementation of flipIt the game of stealthy takeover. 
