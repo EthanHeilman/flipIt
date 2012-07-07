@@ -24,6 +24,22 @@ Playing the Game
 Click [here](http://ethanheilman.github.com/flipIt/playable_with_instructions.html) to play flipIt against the computer.
 
 
+Flip It Notation Rendering
+----------------
+
+To generate a flip game from a list of past moves call the following url appending the moves to the end of the url.
+
+[http://ethanheilman.github.com/flipIt/drawgame.html?flips=100:X,200:Y,300:Y,400:X,450:Y,650:Y,670:X,800:Y,900:X](http://ethanheilman.github.com/flipIt/drawgame.html?flips=100:X,200:Y,300:Y,400:X,450:Y,650:Y,670:X,800:Y,900:X)
+
+The format is the turn at which the flip was made (out of 1000 turns) and which player (X or Y) made the move seperated by a colon (100:X).
+Each flip is seperated from the other flips by a comma. 
+Turn 100 X flips, Turn 200 X flips, Turn 233 Y Flips becomes 100:X,200:X,233Y.
+These games can be saved to png files by right clicking and choosing 'Save Image As' (works only in firefox).
+You can embed games rendered in this fashion add the html code:
+    <iframe 
+    src="http://ethanheilman.github.com/flipIt/drawgame.html?flips=100:X,200:Y,300:Y,400:X,450:Y" 
+    width="850" height="200" frameborder="0"></iframe>
+
 Examples
 --------
 
@@ -122,8 +138,6 @@ To see this example in action go to [http://ethanheilman.github.com/flipIt/playa
 
 If you have a list of moves in a flipIt and we wish to render the state of the game include the following javascript in a webpage and then right click to import as a png.
 
-
-
     <script type="text/javascript" 
     src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" 
@@ -141,4 +155,3 @@ If you have a list of moves in a flipIt and we wish to render the state of the g
     </script>
 
 In the above example we render the game X flips on turn 300, Y flips on turn 500, X flips on turn 900, out of a total 1000 turns. 
-To see this example in action go to [http://ethanheilman.github.com/flipIt/drawgame.html](http://ethanheilman.github.com/flipIt/drawgame.html).
