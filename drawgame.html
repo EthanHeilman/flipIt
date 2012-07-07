@@ -16,7 +16,7 @@
         for( i in flips ) {
           var flip = flips[i];
           var turn = flip.split(":")[0];
-          var player = flip.split(":")[1];
+          var player = flip.split(":")[1].toUpperCase();
           flipHash[turn] = player;
         }
 
