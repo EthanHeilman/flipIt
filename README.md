@@ -18,37 +18,58 @@ Player x always starts the game in control of the board.
 If on the other hand a player is not in control of the board then when they flip they will gain control of the board.
 Players only learn the state of the board when they flip.
 
+Playing the Game
+-----------------
+
+Click [here](http://ethanheilman.github.com/flipIt/playable_with_instructions.html) to play flipIt against the computer.
+
 
 Examples
 --------
 
 Working examples can be found in the examples directory. 
+To see all three examples in action go to [ethanheilman.github.com/flipIt](http://ethanheilman.github.com/flipIt).
 
 ## Computer vs computer game:
+
+A Computer vs computer game can be added to a webpage by either linked to an iframe like so
+
+    <iframe src="http://ethanheilman.github.com/flipIt/computer.html" width="850" height="200" frameborder="0"></iframe>
+
+or by including the following javascript
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/flipit.js"></script>
     <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/drawflipit.js"></script>
 
-    <canvas id="gameBoard1" width="800" height="150"></canvas>
+    <canvas id="gameBoard" width="800" height="150"></canvas>
 
-    <script>
+    <script type="text/javascript">
+
         var numTicksShort = 1000;
         var msPerTickFast = 1;
-              
-        var gConf = new RenderSettings( $("#gameBoard") ); 
-        gConf.numticks = numTicksShort;
-        var gDraw = new FlipItRenderEngine( gConf );
+        
+        var config = new RenderSettings( $("#gameBoard") ); 
+        config.numticks = numTicksShort;
+        var gDraw = new FlipItRenderEngine( config );
 
-        var g = new FlipItGame( gDraw, 
+        var game = new FlipItGame( gDraw, 
           Players["randomPlayer"], Players["periodicPlayer"] );
-              
-        g.newGame();
-        g.start( msPerTickFast, numTicksShort );
-      </script>
+        
+        game.newGame();
+        game.start( msPerTickFast, numTicksShort );
+    </script>
+
+To see this example in action go to [ethanheilman.github.com/flipIt/computer.html](http://ethanheilman.github.com/flipIt/computer.html).
+
 
 ## Human vs computer game:
-Click start to start the game. Note that since you are playing the blue player (player X), the board will appear grey until you flip to learn the state of the board.
+
+A human vs computer game can be added to a webpage by either linking to an iframe like so
+
+    <iframe src="http://ethanheilman.github.com/flipIt/playable.html" width="850" height="250" frameborder="0"></iframe>
+
+or by including the following javascript
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/flipit.js"></script>
@@ -87,9 +108,13 @@ Click start to start the game. Note that since you are playing the blue player (
         });
     </script>
 
+To see this example in action go to [ethanheilman.github.com/flipIt/playable.html](http://ethanheilman.github.com/flipIt/playable.html).
+
 ## Draw games based on recorded moves.
-Specify a set of moves to render that game, right click to import as a png.
-In the below example we render the game X flips on turn 300, Y flips on turn 500, X flips on turn 900, out of a total 1000 turns.
+
+If you have a list of moves in a flipIt and we wish to render the state of the game include the following javascript in a webpage and then right click to import as a png.
+
+
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="https://raw.github.com/EthanHeilman/flipIt/master/js/flipit.js"></script>
@@ -103,3 +128,6 @@ In the below example we render the game X flips on turn 300, Y flips on turn 500
         g3Draw.newBoard();
         g3Draw.drawBoard(1000, {300: "X", 500: "Y", 900: "X"});
     </script>
+
+In the above example we render the game X flips on turn 300, Y flips on turn 500, X flips on turn 900, out of a total 1000 turns. 
+To see this example in action go to [ethanheilman.github.com/flipIt/drawgame.html](http://ethanheilman.github.com/flipIt/drawgame.html).
