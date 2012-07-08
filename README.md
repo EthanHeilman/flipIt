@@ -17,6 +17,7 @@ Start Playing Now
 
 Click [here](http://ethanheilman.github.com/flipIt/playable_with_instructions.html) to play flipIt against the computer.
 Contains detailed instructions on the rules of the game.
+Note: Certain versions of IE do not support HTML5 or the canvas element which will break the game. If game appears broken use Chrome or Firefox.
 
 
 How to Play
