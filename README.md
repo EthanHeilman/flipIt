@@ -5,7 +5,7 @@ This repo contains a javascript implementation of flipIt the game of stealthy ta
 As of July 2012 this is the only computer implementation of the game.
 FlipIt was invented by Marten van Dijk, Ari Juels, Alina Oprea, and Ronald L. Rivest in the paper [FLIPIT: The Game of “Stealthy Takeover”](http://www.rsa.com/rsalabs/presentations/Flipit.pdf).
 
-FlipIt was developed to model [Active Persistent Threats](http://en.wikipedia.org/wiki/Advanced_persistent_threat) 
+FlipIt was developed to model [Advanced Persistent Threats](http://en.wikipedia.org/wiki/Advanced_persistent_threat) 
  or [APTs](http://www.rsa.com/rsalabs/node.asp?id=3911) and other strategic games of limited information.
 For example flipIt is very similar to the situations faced by [spy agencies](http://en.wikipedia.org/wiki/Clandestine_HUMINT) and [insurgent 
 networks](http://en.wikipedia.org/wiki/Guerrilla_warfare) in which members of a network may have been flipped by an enemy network, double crossing the network. 
