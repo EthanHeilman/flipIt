@@ -19,7 +19,7 @@ Click [here](http://ethanheilman.github.com/flipIt/playable_with_instructions.ht
 Contains detailed instructions on the rules of the game.
 
 
-How to play
+How to Play
 ----------------
 
 Flip it is played by two players, X and Y (red and blue). 
@@ -55,7 +55,7 @@ Examples
 Working examples can be found in the examples directory. 
 To see all three examples in action go to [http://ethanheilman.github.com/flipIt](http://ethanheilman.github.com/flipIt). To play against the computer will full rules click [here](http://ethanheilman.github.com/flipIt/playable_with_instructions.html).
 
-## Computer vs computer game:
+### Computer vs Computer Game
 
 A Computer vs computer game can be added to a webpage by either linked to an iframe like so
 
@@ -92,7 +92,7 @@ or by including the following javascript.
 To see this example in action go to [http://ethanheilman.github.com/flipIt/computer.html](http://ethanheilman.github.com/flipIt/computer.html).
 
 
-## Human vs computer game:
+### Human vs Computer Game
 
 To play against a computer go [here](http://ethanheilman.github.com/flipIt/playable_with_instructions.html).
 A human vs computer game can be added to a webpage by either linking to an iframe like so
@@ -144,7 +144,7 @@ or by including the following javascript.
 
 To see this example in action go to [http://ethanheilman.github.com/flipIt/playable.html](http://ethanheilman.github.com/flipIt/playable.html) or [http://ethanheilman.github.com/flipIt/playable_with_instructions.html](http://ethanheilman.github.com/flipIt/playable_with_instructions.html).
 
-## Draw games based on recorded moves.
+### Render Games
 
 If you have a list of moves in a flipIt and we wish to render the state of the game include the following javascript in a webpage and then right click to import as a png.
 
@@ -169,7 +169,7 @@ In the above example we render the game X flips on turn 300, Y flips on turn 500
 Rules For Human vs Computer Games.
 --------
 
-## Basic
+### Basic
 
 You are playing as the blue player.
 While you, the blue player, always start in control the red player can play a flip and gain control at any time.
@@ -179,20 +179,20 @@ You can gain control by playing 'flip'.
 The game ends after 10 seconds.
 
     
-## How to Win
+### How to Win
         
 The object of the game is to win as many points as possible.
 To win you want to be in control for as long as possible using as few flips as possible.
         
 
-## Points
+### Points
 
 A player gains 100 points per second that that player is in control.
 
 A player loses 100 points when that player plays 'flip'.
 
 
-## Moves
+### Moves
 
 The only move available to either the red or the blue player is to play 'flip'.
 If you are in control and you play 'flip' you remain in control.
@@ -200,7 +200,7 @@ If you are not in control and you play 'flip' you regain control.
 One on player can be in control at a time.
 
 
-## The Board
+### The Board
 
 The board displays the current known information about the game.
 Each 'flip' played is marked with a circle.
