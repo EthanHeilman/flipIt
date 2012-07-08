@@ -1,14 +1,20 @@
-flipIt - The Game of Stealthy Takeover
+aflipIt - The Game of Stealthy Takeover
 ======
 
 A javascript implementation of flipIt the game of stealthy takeover. 
-The game was invented by Marten van Dijk, Ari Juels, Alina Oprea, and Ronald L. Rivest in the paper [FLIPIT: The Game of “Stealthy Takeover”](http://www.rsa.com/rsalabs/presentations/Flipit.pdf). 
-This is the only known computer implementation of the game that I know of.
+As of July 2012 this is the only computer implementation of the game.
+FlipIt was invented by Marten van Dijk, Ari Juels, Alina Oprea, and Ronald L. Rivest in the paper [FLIPIT: The Game of “Stealthy Takeover”](http://www.rsa.com/rsalabs/presentations/Flipit.pdf).
 
-About the Game
+FlipIt was developed to model [Active Persistent Threats](http://en.wikipedia.org/wiki/Advanced_persistent_threat) 
+ or (APTs)[http://www.rsa.com/rsalabs/node.asp?id=3911] and other strategic game of limited information.
+For example flipIt is very similar to the situations faced by [spy agencies](http://en.wikipedia.org/wiki/Clandestine_HUMINT) and [insurgent 
+networks](http://en.wikipedia.org/wiki/Guerrilla_warfare) in which members of a network may have been flipped by an enemy network, double crossing the network. 
+Such betrayals will remain unknown to the network until the network actively and at high cost either launches an investigation or flips an enemy agent to learn which friendly agents have been flipped. 
+
+How to play
 ----------------
 
-Flip it is played by two players, X and Y. 
+Flip it is played by two players, X and Y (red and blue). 
 The object of the game is to score as many points as possible.
 Players score points for every second they control the board.
 The only action that either player can perform is to 'flip'.
@@ -22,6 +28,7 @@ Playing the Game
 -----------------
 
 Click [here](http://ethanheilman.github.com/flipIt/playable_with_instructions.html) to play flipIt against the computer.
+Contains detailed instructions on the rules of the game.
 
 
 Flip It Notation Rendering
@@ -155,4 +162,4 @@ If you have a list of moves in a flipIt and we wish to render the state of the g
         g3Draw.drawBoard(1000, {300: "X", 500: "Y", 900: "X"});
     </script>
 
-In the above example we render the game X flips on turn 300, Y flips on turn 500, X flips on turn 900, out of a total 1000 turns. 
+In the above example we render the game X flips on turn 300, Y flips on turn 500, X flips on turn 900, out of a total 1000 turns.
