@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="css/style.css" /> 
@@ -8,8 +9,7 @@
 
     <!-- Start flipit.js once the document loads -->
     <script type="text/javascript">
-    
-      var run = function() {
+      $(document).ready(function(){
        
         var msPerTickSlow = 10;
         var numTicksLong = 2000;
@@ -38,14 +38,7 @@
           sb.update( game.xScore, game.yScore );
         });
 
-      };
-      
-      // To make IE work with the canvas element
-      if($.browser.msie){
-        $(window).load(function(e){ run(); });
-      } else { 
-      	$(document).ready(function(e){ run(); });
-      }      
+      });
     </script>
 
   </head>
@@ -67,7 +60,7 @@
 
     <p>Click start to start the game. You are playing the blue player. The board will appear grey until you flip to learn the state of the board.</p>
 
-  <div id="rules_panel">
+	<div id="rules_panel">
 
 		<h2>Rules</h2>
 		<ul>
