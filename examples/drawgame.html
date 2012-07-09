@@ -10,10 +10,23 @@
     <script type="text/javascript">
       $(document).ready(function(){
 
+        var flipString = window.location.href.split("=")[1];
+        var flips = flipString.split(",");
+
+        var flipHash = {};
+
+        for( i in flips ) {
+          var flip = flips[i];
+          var turn = flip.split(":")[0];
+          var player = flip.split(":")[1].toUpperCase();
+          flipHash[turn] = player;
+        }
+
+
         var config = new RenderSettings( $("#gameBoard") ); 
         var draw = new FlipItRenderEngine( config );
         draw.newBoard();
-        draw.drawBoard(1000, {300: "X", 500: "Y", 900: "X"});
+        draw.drawBoard(1000, flipHash);
 
       });
     </script>
