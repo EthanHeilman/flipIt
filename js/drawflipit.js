@@ -168,6 +168,8 @@ function ScoreBoard( scoreBoardElement, xColor, yColor ) {
     output += "<b><font color="+xColor+">Blue:</font></b> "+xScore;
     output += " ";
     output += "<b><font color="+yColor+">Red:</font></b> "+yScore;
+    output += " ";
+    output += "<b><font color='black'>Delta:</font></b> "+ Math.abs(xScore - yScore);
 
     output += "</br>";
 
