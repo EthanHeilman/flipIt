@@ -15,8 +15,8 @@ function RenderSettings( board ){
 
   this.board = board;
   this.numTicks = 1000; // length of game in turns
-  this.xColor = "0066CC"; // blue
-  this.yColor = "CC2200"; // red
+  this.xColor = "#0066CC"; // blue
+  this.yColor = "#CC2200"; // red
   this.player = "X";
   this.fogOfWar = false;
   this.rightMargin = 8;
