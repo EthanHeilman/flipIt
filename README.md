@@ -3,19 +3,19 @@ flipIt - The Game of Stealthy Takeover
 
 This repo contains a javascript implementation of flipIt the game of stealthy takeover. 
 As of July 2012 this is the only computer implementation of the game.
-FlipIt was invented by Marten van Dijk, Ari Juels, Alina Oprea, and Ronald L. Rivest in the paper [FLIPIT: The Game of “Stealthy Takeover”](http://www.rsa.com/rsalabs/presentations/Flipit.pdf).
+FlipIt was invented by Marten van Dijk, Ari Juels, Alina Oprea, and Ronald L. Rivest in the paper [FLIPIT: The Game of “Stealthy Takeover”](https://www.rsa.com/rsalabs/presentations/Flipit.pdf).
 
-FlipIt was developed to model [Advanced Persistent Threats](http://en.wikipedia.org/wiki/Advanced_persistent_threat) 
- or [APTs](http://www.rsa.com/rsalabs/node.asp?id=3911) and other strategic games of limited information.
-For example flipIt is very similar to the situations faced by [spy agencies](http://en.wikipedia.org/wiki/Clandestine_HUMINT) and [insurgent 
-networks](http://en.wikipedia.org/wiki/Guerrilla_warfare) in which members of a network may have been flipped by an enemy network, double crossing the network. 
+FlipIt was developed to model [Advanced Persistent Threats](https://en.wikipedia.org/wiki/Advanced_persistent_threat) 
+ or [APTs](https://www.rsa.com/rsalabs/node.asp?id=3911) and other strategic games of limited information.
+For example flipIt is very similar to the situations faced by [spy agencies](https://en.wikipedia.org/wiki/Clandestine_HUMINT) and [insurgent 
+networks](https://en.wikipedia.org/wiki/Guerrilla_warfare) in which members of a network may have been flipped by an enemy network, double crossing the network. 
 Such betrayals remain unknown to the network until the network actively and at high cost either launches an investigation or flips an enemy agent to learn which friendly agents have been flipped. 
 
 
 Start Playing Now
 -----------------
 
-Click [here](http://ethanheilman.github.com/flipIt/playable_with_instructions.html) to play flipIt against the computer.
+Click [here](https://ethanheilman.github.com/flipIt/playable_with_instructions.html) to play flipIt against the computer.
 Contains detailed instructions on the rules of the game.
 Note: Certain versions of IE do not support HTML5 or the canvas element which will break the game. If game appears broken use Chrome or Firefox.
 
@@ -38,7 +38,7 @@ Flip It Notation Rendering
 
 This javascript library can generate a visualization of flip game from a list of moves. To generate the visualization visit the following url with the moves appended to the end of the url.
 
-[http://ethanheilman.github.com/flipIt/drawgame.html?flips=100:X,200:Y,300:Y,400:X,450:Y,650:Y,670:X,800:Y,900:X](http://ethanheilman.github.com/flipIt/drawgame.html?flips=100:X,200:Y,300:Y,400:X,450:Y,650:Y,670:X,800:Y,900:X)
+[https://ethanheilman.github.com/flipIt/drawgame.html?flips=100:X,200:Y,300:Y,400:X,450:Y,650:Y,670:X,800:Y,900:X](https://ethanheilman.github.com/flipIt/drawgame.html?flips=100:X,200:Y,300:Y,400:X,450:Y,650:Y,670:X,800:Y,900:X)
 
 The format is, the turn at which the flip was made (out of 1000 turns) and the player (X or Y) made the move, each separated by a colon (100:X).
 Each flip is seperated from the other flips by a comma. 
@@ -47,20 +47,20 @@ These games can be saved to png files by right clicking and choosing 'Save Image
 You can also embed games rendered in this fashion in webpages by adding the html code:
 
     <iframe 
-    src="http://ethanheilman.github.com/flipIt/drawgame.html?flips=100:X,200:Y,300:Y,400:X,450:Y" 
+    src="https://ethanheilman.github.com/flipIt/drawgame.html?flips=100:X,200:Y,300:Y,400:X,450:Y" 
     width="850" height="200" frameborder="0"></iframe>
 
 Examples
 --------
 
 Working examples can be found in the examples directory. 
-To see all three examples in action go to [http://ethanheilman.github.com/flipIt](http://ethanheilman.github.com/flipIt). To play against the computer will full rules click [here](http://ethanheilman.github.com/flipIt/playable_with_instructions.html).
+To see all three examples in action go to [https://ethanheilman.github.com/flipIt](https://ethanheilman.github.com/flipIt). To play against the computer will full rules click [here](https://ethanheilman.github.com/flipIt/playable_with_instructions.html).
 
 ### Computer vs Computer Game
 
 A Computer vs computer game can be added to a webpage by either linked to an iframe like so
 
-    <iframe src="http://ethanheilman.github.com/flipIt/computer.html" 
+    <iframe src="https://ethanheilman.github.com/flipIt/computer.html" 
     width="850" height="200" frameborder="0"></iframe>
 
 or by including the following javascript.
@@ -90,15 +90,15 @@ or by including the following javascript.
         game.start( msPerTickFast, numTicksShort );
     </script>
 
-To see this example in action go to [http://ethanheilman.github.com/flipIt/computer.html](http://ethanheilman.github.com/flipIt/computer.html).
+To see this example in action go to [https://ethanheilman.github.com/flipIt/computer.html](https://ethanheilman.github.com/flipIt/computer.html).
 
 
 ### Human vs Computer Game
 
-To play against a computer go [here](http://ethanheilman.github.com/flipIt/playable_with_instructions.html).
+To play against a computer go [here](https://ethanheilman.github.com/flipIt/playable_with_instructions.html).
 A human vs computer game can be added to a webpage by either linking to an iframe like so
 
-    <iframe src="http://ethanheilman.github.com/flipIt/playable.html" 
+    <iframe src="https://ethanheilman.github.com/flipIt/playable.html" 
     width="850" height="250" frameborder="0"></iframe>
 
 or by including the following javascript.
@@ -143,7 +143,7 @@ or by including the following javascript.
         });
     </script>
 
-To see this example in action go to [http://ethanheilman.github.com/flipIt/playable.html](http://ethanheilman.github.com/flipIt/playable.html) or [http://ethanheilman.github.com/flipIt/playable_with_instructions.html](http://ethanheilman.github.com/flipIt/playable_with_instructions.html).
+To see this example in action go to [https://ethanheilman.github.com/flipIt/playable.html](https://ethanheilman.github.com/flipIt/playable.html) or [https://ethanheilman.github.com/flipIt/playable_with_instructions.html](https://ethanheilman.github.com/flipIt/playable_with_instructions.html).
 
 ### Render Games
 
