@@ -2,12 +2,11 @@ RSA FlipIt - The Game of Stealthy Takeover
 ======
 
 This repo contains a javascript implementation of flipIt the game of stealthy takeover. 
-As of March 2024 this is the 2nd computer implementation of the game... and is based on the first implementation of the game by Ethan Heilman (https://www.ethanheilman.com). The actual javascript game code is largely taken from Ethan's implementation with some additions by myself. The page now allows to select various strategies and costs/benefits including separate costs for reveal and flip.
+As of March 2024 this is the 2nd computer implementation of the game... and is based on the first implementation of the game by Ethan Heilman (https://www.ethanheilman.com). The javascript game code is largely taken from Ethan's implementation with some additions by myself. The page now allows to select various strategies and costs/benefits including separate costs for reveal and flip.
 
-FlipIt was invented by Marten van Dijk, Ari Juels, Alina Oprea, and Ronald L. Rivest in the paper [FLIPIT: The Game of “Stealthy Takeover”](https://www.rsa.com/rsalabs/presentations/Flipit.pdf).
+FlipIt was invented by Marten van Dijk, Ari Juels, Alina Oprea, and Ronald L. Rivest in the paper [FLIPIT: The Game of “Stealthy Takeover”](https://eprint.iacr.org/2012/103).
 
-FlipIt was developed to model [Advanced Persistent Threats](https://en.wikipedia.org/wiki/Advanced_persistent_threat) 
- or [APTs](https://eprint.iacr.org/2012/103) and other strategic games of limited information.
+FlipIt was developed to model [Advanced Persistent Threats](https://en.wikipedia.org/wiki/Advanced_persistent_threat) and other strategic games of limited information.
 For example flipIt is very similar to the situations faced by [spy agencies](https://en.wikipedia.org/wiki/Clandestine_HUMINT) and [insurgent 
 networks](https://en.wikipedia.org/wiki/Guerrilla_warfare) in which members of a network may have been flipped by an enemy network, double crossing the network. 
 Such betrayals remain unknown to the network until the network actively and at high cost either launches an investigation or flips an enemy agent to learn which friendly agents have been flipped. 
