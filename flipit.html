@@ -29,6 +29,19 @@
 
             //Initialize a new Game. Picks up config from the GUI
             function initGame() {
+            
+                //(re-)size the game canvas
+                //For mobile devices
+                const canvasDiv = document.getElementById("gameBoardDiv");
+                const canvas = document.getElementById("gameBoard");
+                let ratio=window.devicePixelRatio||1;
+                let gameWidth = $("#gameBoardDiv").width();
+                let gameHeight = $("#gameBoardDiv").height();
+                
+                canvas.style.width=`${gameWidth}px`;
+                canvas.style.height=`${gameHeight}px`;
+                canvas.width=Math.floor(gameWidth*ratio);
+                canvas.height=Math.floor(gameHeight*ratio);
 
                 config = new RenderSettings($("#gameBoard"));
                 config.fogOfWar = config.fogOfWar = $("#fogOfWar").prop("checked");
@@ -54,7 +67,23 @@
                 sb.update(0, 0, 0, 0);
 
             }
+            
+            //function to reload page on orientation change            
+             const displayOrientation = () => {
+                location.reload();
 
+            };
+  
+            //add listener to react on orientation change
+            if (screen && screen.orientation !== null) {
+                try {
+                window.screen.orientation.onchange = displayOrientation;
+                
+                }
+                catch (e) {  }
+            }
+
+            
             //Called when page loaded is complete. 
             $(document).ready(function () {
 
@@ -66,9 +95,8 @@
                     return new materialstyle.SelectField(select)
                 })
 
-                //(re-)size the game canvas
-                let gameWidth = $("#gameBoardDiv").width();
-                $("#gameBoard").width(Math.round(gameWidth));
+                
+                
 
                 //Initialize the first game
                 initGame();
@@ -191,7 +219,7 @@
                     <div class="row justify-content-center">
                         <div class="col-sm-12 col-lg-8 text-center" id="gameBoardDiv">
 
-                            <canvas id="gameBoard" width="1000" height="150"><h1>Canvas element not supported by your browser. Use an HTML5 compatible browser like Chrome or Firefox.</h1></canvas>
+                            <canvas id="gameBoard" ><h1>Canvas element not supported by your browser. Use an HTML5 compatible browser like Chrome or Firefox.</h1></canvas>
 
                         </div>
 

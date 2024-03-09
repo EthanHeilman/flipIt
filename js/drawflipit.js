@@ -70,8 +70,9 @@ function FlipItRenderEngine(renderSettings) {
 
         var context = board[0].getContext("2d");
 
-        var h = board.height();
-        var w = board.width();
+        let ratio=window.devicePixelRatio||1;
+        var h = board.height()*ratio;
+        var w = board.width()*ratio;
 
         // maps ticks in the game state to x-coordines on the board
         var mapX = function (tick) {
@@ -191,8 +192,9 @@ function ScoreBoard( ) {
  */
 function drawArrow(context, x1, y1, x2, y2) {
 
+    let ratio=window.devicePixelRatio||1;
     context.fillStyle = "silver";
-    context.lineWidth = 2;
+    context.lineWidth = 2*ratio;
     //draw a line
     context.beginPath();
     context.moveTo(x1, y1);
@@ -201,7 +203,7 @@ function drawArrow(context, x1, y1, x2, y2) {
     context.stroke();
 
     //draw the head
-    var head_size = 7;
+    var head_size = 7*ratio;
     context.moveTo(x2, y2);
     context.beginPath();
     context.lineTo(x2 - head_size, y2 - head_size);
@@ -212,11 +214,12 @@ function drawArrow(context, x1, y1, x2, y2) {
 }
 
 function drawCircle(context, color, size, x, y) {
+    let ratio=window.devicePixelRatio||1;
     context.fillStyle = color;
     context.strokeStyle = color;
     context.lineWidth = 2;
     context.beginPath();
-    context.arc(x, y, size, 0, Math.PI * 2, true);
+    context.arc(x, y, size*ratio, 0, Math.PI * 2, true);
     context.closePath();
     context.fill();
     context.stroke();
@@ -224,8 +227,9 @@ function drawCircle(context, color, size, x, y) {
 }
 
 function drawRect(context, x, y, w, h, color) {
+    let ratio=window.devicePixelRatio||1;
     context.fillStyle = color;
-    context.lineWidth = 2;
+    context.lineWidth = 2*ratio;
 
     context.beginPath();
     context.rect(x, y, w, h);
@@ -236,7 +240,7 @@ function drawRect(context, x, y, w, h, color) {
 
 // Draws a horizontal line starting a the point (x, y) of length l
 function drawHLine(context, x, y, l) {
-
+    let ratio=window.devicePixelRatio||1;
     // firefox does not render lines with large widths correctly
     var line_fix = 0;
     var is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
@@ -244,7 +248,7 @@ function drawHLine(context, x, y, l) {
         line_fix = 2;
     }
 
-    context.lineWidth = 5;
+    context.lineWidth = 3*ratio;
 
     context.beginPath();
     context.moveTo(x, y + line_fix);
