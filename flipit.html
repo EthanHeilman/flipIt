@@ -1,0 +1,579 @@
+<html lang="en"  data-bs-theme="light">
+    <head>
+
+
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="stylesheet"  href="./ui/materialstyle/css/materialstyle.min.css">
+        <link rel="stylesheet" type="text/css" href="./ui/fontawesome/css/all.css" /> 
+
+
+        <script type="text/javascript" src="./ui/jquery/jquery-3.7.1.min.js"></script>
+        <script type="text/javascript" src="./js/flipit.js"></script>
+        <script type="text/javascript" src="./js/drawflipit.js"></script>
+
+        <!-- Start flipit.js once the document loads -->
+        <script type="text/javascript">
+
+
+            var msPerTickSlow = 10;
+            var numTicksLong = 2000;
+
+            var config;
+            var gDraw;
+            var sb;
+            var gameSettings;
+            var game;
+
+            //Initialize a new Game. Picks up config from the GUI
+            function initGame() {
+
+                config = new RenderSettings($("#gameBoard"));
+                config.fogOfWar = config.fogOfWar = $("#fogOfWar").prop("checked");
+                config.numTicks = numTicksLong;
+                gDraw = new FlipItRenderEngine(config);
+
+
+                sb = new ScoreBoard();
+
+                gameSettings = new GameSettings();
+                gameSettings.xControlBenefit = parseInt($("#xBenefit").val());
+                gameSettings.xFlipCost = parseInt($("#xFlipCost").val());
+                gameSettings.xRevealCost = parseInt($("#xRevealCost").val());
+
+                gameSettings.yControlBenefit = parseInt($("#yBenefit").val());
+                gameSettings.yFlipCost = parseInt($("#yFlipCost").val());
+                gameSettings.yRevealCost = parseInt($("#yRevealCost").val());
+
+                game = new FlipItGame(gDraw,
+                        Players[$("#playerBlueType").val()], Players[$("#playerRedType").val()], sb.update, gameSettings);
+
+                game.newGame();
+                sb.update(0, 0, 0, 0);
+
+            }
+
+            //Called when page loaded is complete. 
+            $(document).ready(function () {
+
+
+                //Initialize the GUI controls
+                $('.form-control').textfield();
+                var selectList = [].slice.call(document.querySelectorAll('.form-select'))
+                var selectFields = selectList.map(function (select) {
+                    return new materialstyle.SelectField(select)
+                })
+
+                //(re-)size the game canvas
+                let gameWidth = $("#gameBoardDiv").width();
+                $("#gameBoard").width(Math.round(gameWidth));
+
+                //Initialize the first game
+                initGame();
+
+                //setup button listeners
+                $("#startBtn").click(function () {
+                    sb.update(0, 0, 0, 0);
+                    game.start(msPerTickSlow, numTicksLong);
+                });
+
+                $("#flipBtn").click(function () {
+                    game.defenderFlip();
+                    sb.update(game.xScore, game.xCost, game.yScore, game.yCost);
+                });
+
+                $("#resetBtn").click(function () {
+                    game.endGame();
+                    initGame();
+                });
+
+
+
+                //Listeners for any changes. They end the current game and initialize a new one
+                //This creates a new game with the current config values
+                $(".form-control").change(function () {
+                    game.endGame();
+                    initGame();
+                });
+
+                //Separate listener for the select elements. 
+                $(".form-select").change(function () {
+                    game.endGame();
+
+                    //if a non-human player is selected, turn fog of war off by default
+                    if ($("#playerBlueType").val() != "humanPlayer") {
+                        config.fogOfWar = $("#fogOfWar").prop("checked", false);
+                        $("#flipBtn").hide(200);
+                        $("#playerBlueIcon").removeClass("fa-user");
+                        $("#playerBlueIcon").addClass("fa-robot");
+                        $("#fogOfWar").prop("disabled", true);
+                    } else {
+                        // human player: let's turn on the fog of war
+                        $("#flipBtn").show(200);
+                        $("#fogOfWar").prop("disabled", false);
+                        $("#fogOfWar").prop("checked", true);
+                        $("#playerBlueIcon").removeClass("fa-robot");
+                        $("#playerBlueIcon").addClass("fa-user");
+                    }
+                    initGame();
+                });
+
+                $("#fogOfWar").change(function () {
+                    game.endGame();
+                    initGame();
+                });
+
+            });
+        </script>
+
+    </head>
+
+    <title>FlipIt - The Game of Stealthy Takeover</title>
+    <body>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-sm bg-primary navbar-dark fixed-top">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center ">
+                    <a class="navbar-brand d-flex align-items-center" href="#top">
+                        <i class="bi bi-star-fill me-2"></i>RSA FlipIt
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+                            <li class="nav-item">
+                                <a class="nav-link active " aria-current="page" href="#top"><i class="fa-solid fa-gamepad me-2"></i>The Game</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#settings"><i class="fa-solid fa-sliders me-2"></i>Settings</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#instructions"><i class="fa-solid fa-book-open me-2"></i>Instructions</a>
+                            </li>
+
+                            <li class="nav-item dropdown ms-4">
+                                <a class=" nav-link dropdown-toggle active"  id="dropdownMenuButtonLight" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-circle-half-stroke" id="modeIndicator" ></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonLight">
+                                    <li><a class="dropdown-item "   data-bs-theme-value="auto"><i class="fa-solid fa-circle-half-stroke me-2"></i>Auto</a></li>
+                                    <li><a class="dropdown-item"   data-bs-theme-value="light"><i class="fa-solid fa-sun me-2"></i>Light</a></li>
+                                    <li><a class="dropdown-item"  data-bs-theme-value="dark"><i class="fa-solid fa-moon me-2"></i>Dark</a></li>
+
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="container" style="margin-top: var(--navbar-fixed-height);">
+            <div id="top"  >
+                <h1 id="title" class="h1-responsive text-center">RSA FlipIt - The Game of Stealthy Takeover</h1>
+            </div>
+
+
+
+            <div class="card border border-light shadow mt-4">
+                <div class="card-body">
+                    <h3 class="card-title text-center"><i class="fa-solid fa-gamepad me-2"></i>The Game</h3>
+                    <div class="row justify-content-center">
+                        <div class="col-sm-12 col-lg-8 text-center" id="gameBoardDiv">
+
+                            <canvas id="gameBoard" width="1000" height="150"><h1>Canvas element not supported by your browser. Use an HTML5 compatible browser like Chrome or Firefox.</h1></canvas>
+
+                        </div>
+
+                        <div class="col-sm-12 col-lg-4 yellow lighten-5">
+                            <div id="scoreBoard" class="card bg-info-subtle">
+                                <div class="card-body">
+                                    <h4 class="text-center"><i class="fa-solid fa-flag-checkered me-2"></i>Scoreboard</h4>
+                                    <div class="row ">
+                                        <div class="col text-end"></div>
+                                        <div class="col">Control</div>
+                                        <div class="col">Costs</div>
+                                        <div class="col">Score</div>
+                                    </div>
+                                    <div class="row text-primary">
+                                        <div class="col text-end"><h5 >Blue</h5></div>
+                                        <div class="col"><span id="blueControl"/></div>
+                                        <div class="col"><span id="blueCost"/></div>
+                                        <div class="col"><h5 id="blueScore"/></div>
+                                    </div>
+
+                                    <div class="row text-danger">
+                                        <div class="col text-end"><h5 >Red</h5></div>
+                                        <div class="col"><span id="redControl"/></div>
+                                        <div class="col"><span id="redCost"/></div>
+                                        <div class="col"><h5 id="redScore"/></div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row justify-content-center mt-3">
+                        <div class="col-12 text-center">
+
+                            <button id="startBtn" class="btn btn-success elevated-2"><i class="fa-solid fa-play me-2"></i>Start</button>
+                            <button id="resetBtn"  class="btn btn-warning elevated-2"><i class="fa-solid fa-backward-step me-2"></i>Reset</button>
+                            <button id="flipBtn"  class="btn btn-primary elevated-2"><i class="fa-solid fa-arrows-rotate me-2"></i>Flip</button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card border border-light shadow mt-4" id='settings'>
+                <div class="card-body">
+                    <h3 class="card-title text-center"><i class="fa-solid fa-sliders me-2"></i>Game Settings</h3>
+                    <br>
+                    <div class="row justify-content-center">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="card bg-primary-subtle lighten-5">
+                                <div class="card-body ">
+                                    <h5 class="h5-responsive text-center"><i class="fa-solid fa-user me-2" id="playerBlueIcon"></i>Player Blue</h5>
+                                    <br>
+                                    <div class="form-floating-with-icon">
+                                        <div class="form-floating form-floating-outlined  ">
+                                            <select class="form-select" id="playerBlueType">
+                                                <option value="humanPlayer">Human (manual)</option>
+                                                <option value="randomPlayer">Random</option>
+                                                <option value="randomPlayerFast">Random Fast</option>
+                                                <option value="randomPlayerMinMoves">Random with 10+ moves</option>
+                                                <option value="periodicPlayer">Periodic A</option>
+                                                <option value="periodicPlayerDelay">Periodic B</option>
+                                            </select>
+                                            <label>Strategy</label>
+                                        </div>
+                                        <div class="prepend">
+                                            <i class="fa-solid fa-arrows-to-circle"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-floating-with-icon">
+                                        <div class="form-floating form-floating-outlined mt-3" >
+                                            <input type="number" id="xFlipCost" class="form-control" value=100 min=0 />
+                                            <label class="form-label" for="xFlipCost">Move cost Flip</label>
+                                        </div>
+                                        <div class="prepend">
+                                            <i class="fa-solid fa-money-bill-1-wave"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-floating-with-icon">
+                                        <div class="form-floating form-floating-outlined mt-3" >
+                                            <input type="number" id="xRevealCost" class="form-control" value=0 min=0 />
+                                            <label class="form-label" for="xRevealCost">Move cost Reveal</label>
+                                        </div>
+                                        <div class="prepend">
+                                            <i class="fa-solid fa-money-bill-1-wave"></i>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-floating-with-icon">
+                                        <div class="form-floating form-floating-outlined mt-3" >
+                                            <input type="number" id="xBenefit" class="form-control" value=1 min=0 />
+                                            <label class="form-label" for="xBenefit">Benefit</label>
+                                        </div>
+                                        <div class="prepend">
+                                            <i class="fa-solid fa-piggy-bank"></i>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-sm-12 col-md-6">
+                            <div class="card bg-danger-subtle lighten-5">
+                                <div class="card-body ">
+                                    <h5 class="h5-responsive text-center "><i class="fa-solid fa-robot me-2"></i>Player Red</h5>
+                                    <br>
+
+
+                                    <div class="form-floating-with-icon">
+                                        <div class="form-floating form-floating-outlined ">
+                                            <select class="form-select "  id="playerRedType">
+                                                <option value="randomPlayer">Random</option>
+                                                <option value="randomPlayerFast">Random Fast</option>
+                                                <option value="randomPlayerMinMoves">Random with 10+ moves</option>
+                                                <option value="periodicPlayer">Periodic A</option>
+                                                <option value="periodicPlayerDelay">Periodic B</option>
+                                            </select>
+
+                                            <label>Strategy</label>
+                                        </div>
+                                        <div class="prepend">
+                                            <i class="fa-solid fa-arrows-to-circle"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-floating-with-icon">
+                                        <div class="form-floating form-floating-outlined mt-3" >
+                                            <input type="number" id="yFlipCost" class="form-control" value=100 min=0 />
+                                            <label class="form-label" for="yFlipCost">Move cost Flip</label>
+                                        </div>
+                                        <div class="prepend">
+                                            <i class="fa-solid fa-money-bill-1-wave"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-floating-with-icon">
+                                        <div class="form-floating form-floating-outlined mt-3" >
+                                            <input type="number" id="yRevealCost" class="form-control" value=0 min=0 />
+                                            <label class="form-label" for="yRevealCost">Move cost Reveal</label>
+                                        </div>
+                                        <div class="prepend">
+                                            <i class="fa-solid fa-money-bill-1-wave"></i>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-floating-with-icon">
+                                        <div class="form-floating form-floating-outlined mt-3" >
+                                            <input type="number" id="yBenefit" class="form-control" value=1 min=0 />
+                                            <label class="form-label" for="yBenefit">Benefit</label>
+                                        </div>
+                                        <div class="prepend">
+                                            <i class="fa-solid fa-piggy-bank"></i>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="card bg-secondary-subtle mt-3">
+                        <div class="card-body text-center">
+                            <h5 class="text-center"><i class="fa-solid fa-smog me-2"></i>Fog of War</h5>
+                            <div class="form-check form-switch">
+                                <label>
+
+                                    <input type="checkbox" id="fogOfWar" class="form-check-input" checked>
+
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <div class="card border border-light shadow mt-4" id='instructions'>
+                <div class="card-body">
+                    <h3 class="card-title text-center"><i class="fa-solid fa-book-open me-2"></i>Instructions</h3>
+
+
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                    tl;dr
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne" data-bs-parent="#accordionPanelsStayOpenExample">
+                                <div class="accordion-body">
+                                    FlipIt is played by two players: Blue and Red. <br>
+                                    The object of the game is to score as many points as possible. <br>
+                                    Players score points for every second they control the board. <br>
+                                    The board represents a resource of some kind e.g. a computer/network/physical location etc.<br>
+                                    The only action that either player can perform is to ‘flip’. <br>
+                                    Each flip action costs the flipping player points. <br>
+                                    If a player chooses to flip and they are in control of the board then they stay in control of the board. <br>
+                                    If a player is not in control of the board then when they flip they will gain control of the board. <br>
+                                    Player Blue always starts the game in control of the board. <br>
+                                    Players only learn the state of the board when they flip.<br>
+                                    In the default settings, players do not see if the other player made a move.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                    Rules for the default game (Human vs. Computer)
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo" data-bs-parent="#accordionPanelsStayOpenExample">
+                                <div class="accordion-body">
+                                    <h5 class='mt-2'>Basics</h5>
+                                    You are playing as the blue player. While you, the blue player, always start in control the red player can play a flip and gain control at any time. 
+                                    The state of the board is obscured in grey (Fog of War). You and the red player only learn the state of the game by playing ‘flip’. You can gain control by playing ‘flip’. The game ends after 10 seconds.
+                                    <br>
+                                    The computer makes random moves. That means that some rounds only a few and in other rounds many.
+                                    <h5 class='mt-2'>Objective of the game</h5>
+                                    The objective of the game is to win as many points as possible. To win you want to be in control for as long as possible using as few flips (moves) as possible.
+
+                                    <h5 class='mt-2'>Points</h5>
+                                    A player gains 100 points per second that that player is in control.<br>
+                                    A player loses 100 points when that player plays ‘flip’.
+
+                                    <h5 class='mt-2'>Moves</h5>
+                                    The only move available to either the red or the blue player is to play ‘flip’. If you are in control and you play ‘flip’ you remain in control. <br>
+                                    If you are not in control and you play ‘flip’ you regain control. One on player can be in control at a time.
+
+                                    <h5 class='mt-2'>The Board</h5>
+                                    The board displays the current known information about the game. Each ‘flip’ played is marked with a circle.<br>
+                                    You can only see information that was revealed by your flips. The scores are updated when you play a ‘flip’ and reveal the current state of the game. 
+                                    <br>
+                                    Blue rectangles represent periods of time in which you, the blue player, had control. Red rectangles represent periods of time in which the red player was in control. 
+                                    <br>The score is given in the upper right hand corner.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                                    Advanced Options
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree" data-bs-parent="#accordionPanelsStayOpenExample">
+                                <div class="accordion-body">
+                                    <h4 class="mt-3">Strategies</h4>
+                                    You can select different strategies for each player. <br>
+                                    The strategy selected controls when an action/flip will be initiated by the player.<br>
+                                    Following strategies are available:
+                                    <h5 class="mt-2">Human</h5>
+                                    Strictly speaking not a strategy but an option for Player Blue to let you perform the flips manually. You need to hit the "Flip" button to... flip.
+                                    <br>This option is not available for Player Red.
+
+                                    <h5 class="mt-2">Random</h5>
+                                    As the name suggests, the moves are initiated after a random amount of time passed. This may mean that a lot of moves are performed during a round or only a few.
+
+                                    <h5 class="mt-2">Random fast</h5>
+                                    Random... but faster (=more moves per round) than the normal Random strategy. 
+
+                                    <h5 class="mt-2">Random with minimum 10 moves</h5>
+                                    Moves are initiated randomly but happen at least 10 times per round.<br>
+                                    Think of this as a mix of periodic moves but with some random variance. Some moves may happen earlier, some later than a "pure" periodic strategy. 
+
+                                    <h5 class="mt-2">Periodic A</h5>
+                                    Moves are initiated in a well-defined interval. Exactly 10 moves per round.
+
+                                    <h5 class="mt-2">Periodic B</h5>
+                                    Moves are initiated in a well-defined interval. Exactly 10 moves per round... but slightly after a move initiated by Period A. <br>
+                                    Choose A and B for the players and see why e.g. periodic password changes provide no benefit in terms of security.
+
+                                    <hr>
+                                    <h4 class="mt-3">Costs</h4>
+                                    The default game is symmetric: Player Blue and Player Red have exactly the same costs and benefits. <br>
+                                    You can setup the game so that the players have different costs and benefits. <br>
+                                    You can use this to show that e.g. a lower move cost allows a player to make more moves that are within "budget" and therefore force the other player out. 
+                                    <h5 class="mt-2">Move cost Flip</h5>
+                                    This is the cost per action/flip.<br>
+                                    If the "Move cost Reveal" is zero, the "Move cost Flip" is deducted from the accumulated benefit every time a player makes a move.<br>
+                                    If (and only if!) the "Move cost Reveal" is greater than zero, the Move Cost Flip only is deducted from the players accumulated benefit if the move actually caused a flip.<br>
+                                    <h5 class="mt-2">Move cost Reveal</h5>
+                                    The cost for a move that reveals the current state of the board (= who controls the board). <br>
+                                    If the board belongs to the player that made the move, only the reveal costs are deducted from the accumulated benefit.<br>
+                                    However, if the move reveals that the board is under control of the opposing player, the "Move cost Flip" and the "Move cost Reveal" are deducted from the accumulated benefit of the player that initiated the move.
+                                    <hr>
+                                    <h4 class="mt-3">Benefit</h4>
+                                    This is the imaginary benefit gained per time slice the player has control over the board. 
+                                    <hr>
+                                    <h4 class="mt-3">Fog of War</h4>
+                                    If Player Blue is human, the Fog of War is enabled by default but can we switched off.<br>
+                                    If enabled, the fog of war hides the current status of the board from the players until they make a move. <br>
+                                    For computer vs. computer games, the fog of war is disabled.
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+                                    What is RSA FlipIt?
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour" data-bs-parent="#accordionPanelsStayOpenExample">
+                                <div class="accordion-body">
+                                    <p>
+                                        Game theory is the the branch of mathematics concerned with the analysis of strategies for dealing with competitive situations where the outcome of a participant's choice of action depends on the actions of other participants. Game theory has been applied to contexts in war, business, and biology... and (IT-)security.
+                                    </p>
+                                    <p>
+                                        RSA FlipIt is a game where two players (attacker and defender) compet over a resource. FlipIt was developed by the RSA Labatories and Ron Rivest in 2012. The orginal paper is available <a href="https://eprint.iacr.org/2012/103" target="_blank">here.</a>
+                                    </p>
+                                    <p>
+                                        What made FlipIt special at that time was, that the players can move at any time and that the opponent's moves are hidden until a player makes their move. 
+                                        That is very different from other games where players move one after the other and the result of any move is visible to the other player(s).
+                                    </p>
+                                    <p>
+                                        The benefit for each player is directly related to the time that player has control over the resource. The resource could be anything but the original idea of FlipIt was, that this is about e.g. a server, a cryptographic key management system etc. 
+                                        To model real-life scenarios more closely, each move has a cost associated to it. The cost per move ensures, that the players cannot simply play multiple moves in rapid succession. If they would do that, all of their benefits are likely to be consumed by the costs of those moves.
+                                    </p>
+                                    FlipIt gives us a couple of lessons about the resources we defend (or attack... this knowledge isn't just for defenders):
+                                    <ol>
+                                        <li>One should always assume complete compromise of the resource e.g. complete loss of control over a server, cryptographic key, Helms Deep, etc.</li>
+                                        <li>Agressive play of one player can force the opponent out of the game. That is thanks to the costs of each move. If the defender's costs are lower than that of the attacker, the defender can play faster. The attacker will soon reach a point where it is no longer sensible to continue as there is no profit to be made any longer.</li>
+
+                                        The defender should therefore "rig" the system so that the defender's move costs are lower and therefore the attackers move costs are higher.
+                                        <li>Visibility into the state of the resource is important. The more visibility a player has, the more efficiently the defender's moves can be performed. No move is wasted, no unneeded costs occur. </li>
+                                    </ol>
+                                    This online FlipIt game tries to visualize the game under various assumptions:
+                                    <ul>
+                                        <li>The attacker can play according to various strategies: random, periodic, random-with-minium-moves </li>
+                                        <li>The defender can use the same strategies or be controled by a human (assumption: that is you).</li>
+                                    </ul>
+                                    By adjusting one's strategy (when to move) and the various costs and the benefit, you can see for yourself that:
+                                    <ul>
+                                        <li>Moving more often results in more time the resource is under control</li>
+                                        <li>Having low move-costs does make a difference. This includes having the option to have a (relatively low) move costs for "Reveal" moves  - this option allows a player to incur lower costs per move as just checking wether the resource is still under control by the player is cheaper than the costs of flipping the resource regardless of it's state.</li>
+                                        <li>Periodic moves are a bad idea. Make your moves unpredictable. That could mean completely random or at least in a pattern that cannot be easily guessed. Moves could be based on memoryless exponential distribution for example. </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div class="mt-4 text-center">
+                Authors: <a href="https://www.linkedin.com/in/ingo-schubert/" target="_blank">Ingo Schubert</a> based on <a href="https://www.ethanheilman.com" target="_blank">Ethan Heilman's</a> <a href="https://github.com/EthanHeilman/flipIt" target="_blank">flipIt</a>.
+            </div>
+        </div>
+
+        <script>
+
+
+        </script>
+        <!-- Popper JS -->
+        <script src="./ui/popperjs/popper.min.js"></script>
+
+        <!-- Material Style JS -->
+        <script src="./ui/materialstyle/js/materialstyle.min.js"></script>
+        <script src="./ui/materialstyle/js/colormodeswitcher.js"></script>
+
+    </body>
+</html>
