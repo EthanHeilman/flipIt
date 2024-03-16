@@ -15,7 +15,7 @@ Such betrayals remain unknown to the network until the network actively and at h
 Start Playing Now
 -----------------
 
-Click [here](https://rsa-ingo.github.io/flipIt/flipit.html) to play flipIt against the computer or let the computer play against itself.
+Click [here](https://ethanheilman.github.io/flipIt/flipit.html) to play flipIt against the computer or let the computer play against itself.
 Contains detailed instructions on the rules of the game.
 
 
